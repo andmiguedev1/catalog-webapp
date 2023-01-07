@@ -1,26 +1,12 @@
-import { Product } from '../../models/product';
-import { List, ListItem, ListItemAvatar, ListItemText, Avatar } from '@mui/material';
+import CatalogList from './CatalogList';
 
-interface Props {
-   products: Product[]
-}
+import { StoreProducts } from '../../models/product';
 
-function Catalog({products}: Props) {
+function Catalog({products}: StoreProducts) {
    return (
       <>
-         <List>
-            {products.map((product) => (
-               <ListItem key={product.id}>
-                  <ListItemAvatar>
-                     <Avatar src={product.image} />
-                  </ListItemAvatar>
-                  <ListItemText>
-                     {product.name} - ${product.price}
-                  </ListItemText>
-               </ListItem>
-            ))}
-         </List>
-    </>
+         <CatalogList products={products} />
+      </>
    )
 }
 
