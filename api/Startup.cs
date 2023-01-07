@@ -33,6 +33,8 @@ namespace api
          {
             options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
          });
+         //
+         services.AddCors();
       }
 
       // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,9 +47,14 @@ namespace api
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "api v1"));
          }
 
-         app.UseHttpsRedirection();
-
+         // app.UseHttpsRedirection();
          app.UseRouting();
+
+         // Allow any request in development mode
+         app.UseCors(options =>
+         {
+            options.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+         });
 
          app.UseAuthorization();
 
