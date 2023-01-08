@@ -25,7 +25,7 @@ function CatalogCard({product}: Props) {
             </CardContent>
             <CardActions>
                <Button size='small' variant='contained' fullWidth={true}>Add to cart</Button>
-               <Button size='small'>View</Button>
+               <Button size='small' variant='outlined'>View</Button>
             </CardActions>
       </Card>
       </>
