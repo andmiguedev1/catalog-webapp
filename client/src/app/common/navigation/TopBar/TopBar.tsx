@@ -1,5 +1,5 @@
 
-import { AppBar, Toolbar, Typography, FormGroup, FormControlLabel, Switch, IconButton, } from '@mui/material';
+import { AppBar, Toolbar, Typography, FormGroup, FormControlLabel, Switch, } from '@mui/material';
 import LightMode from '@mui/icons-material/LightMode';
 import DarkMode from '@mui/icons-material/DarkMode'
 
