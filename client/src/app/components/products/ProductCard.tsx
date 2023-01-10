@@ -3,10 +3,10 @@ import { Card, CardHeader, CardMedia, CardContent, CardActions, Avatar, Typograp
 import { Product } from '../../models/product';
 
 interface Props {
-   product: Product
+   product: Product,
 }
 
-function CatalogCard({product}: Props) {
+function ProductCard({product}: Props) {
    return (
       <>
       <Card>
@@ -25,11 +25,11 @@ function CatalogCard({product}: Props) {
             </CardContent>
             <CardActions>
                <Button size='small' variant='contained' fullWidth={true}>Add to cart</Button>
-               <Button size='small' variant='outlined'>View</Button>
+               <Button size='small' href={`/products/${product.id}`} >View</Button>
             </CardActions>
       </Card>
       </>
    )
 }
 
-export default CatalogCard
+export default ProductCard

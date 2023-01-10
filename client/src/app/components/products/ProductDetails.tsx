@@ -7,7 +7,7 @@ import { LoadingButton } from '@mui/lab';
 
 import { Product } from '../../models/product';
 
-function CatalogDetails() {
+function ProductDetails() {
    const { productId } = useParams<{ productId: string }>();
 
    const [catalogInfo, setCatalogInfo] = useState<Product | null>(null);
@@ -18,13 +18,12 @@ function CatalogDetails() {
          .then(serverResponse => setCatalogInfo(serverResponse.data))
          .catch(error => console.warn(error))
          .finally(() => setLoadCatalog(false))
-  }, [productId])
+   }, [productId]);
    
    return (
       <>
-         {loadCatalog && <LoadingButton loading={true} loadingIndicator />}
          {!catalogInfo ? (
-            <Typography>Sorry! We can't load the catalog at this time. Try again</Typography>
+            <LoadingButton loading={true} />
          ): (
             <Grid container spacing={6}>
                <Grid item xs={6}>
@@ -65,4 +64,4 @@ function CatalogDetails() {
    )
 }
 
-export default CatalogDetails
+export default ProductDetails
