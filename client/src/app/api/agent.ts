@@ -1,5 +1,6 @@
 import axios, { AxiosResponse, AxiosError } from 'axios'
 import { toast } from 'react-toastify'
+// import { history } from '../../index'
 
 import { getValidationError } from './helpers'
 
@@ -46,7 +47,7 @@ const Endpoints = {
 }
 
 const CommonErrors = {
-   invalidRequest: () => requestType.get('Error/validation-error').catch(error => console.info(error)),
+   invalidRequest: () => requestType.get('Error/validation-error'),
    badRequest: () => requestType.get('Error/bad-request').catch(error => console.warn(error)),
    unauthorized: () => requestType.get('Error/unauthorized').catch(error => console.warn(error)),
    notFound: () => requestType.get('Error/not-found').catch(error => console.warn(error)),

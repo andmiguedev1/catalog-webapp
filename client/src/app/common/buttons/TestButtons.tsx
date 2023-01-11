@@ -9,7 +9,10 @@ function TestButtons() {
 	const [invalidErrors, setInvalidErrors] = useState<string[]>([])
 
 	async function displayErrors() {
+		
 		agent.CommonErrors.invalidRequest()
+			.then(error => console.log(error))
+			.catch(invalidErrors => setInvalidErrors(invalidErrors))
 	}
 
 	return (
@@ -44,7 +47,7 @@ function TestButtons() {
 						Server Error
 					</Button>
 				</ButtonGroup>
-				{invalidErrors && <TrackErrors invalidErrors={invalidErrors} />}
+				{invalidErrors.length > 0 && <TrackErrors invalidErrors={invalidErrors} />}
 			</Container>
 		</Layout>
 	)
