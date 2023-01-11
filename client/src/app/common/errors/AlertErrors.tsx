@@ -4,7 +4,7 @@ interface Props {
 	invalidErrors?: string[]
 }
 
-function TrackErrors({ invalidErrors }: Props) {
+function AlertErrors({ invalidErrors }: Props) {
 	return (
 		<Alert severity='error'>
 			<AlertTitle>An error has occurred!</AlertTitle>
@@ -19,4 +19,4 @@ function TrackErrors({ invalidErrors }: Props) {
 	)
 }
 
-export default TrackErrors
+export default AlertErrors

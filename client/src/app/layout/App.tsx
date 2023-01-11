@@ -1,17 +1,26 @@
-import { Route, Switch } from 'react-router-dom'
+import { Route, Router, Switch } from 'react-router-dom'
+import { createBrowserHistory } from 'history'
 
+import TestButtons from '../common/buttons/TestButtons'
+// import AlertErrors from '../common/errors/AlertErrors'
 import CatalogList from '../pages/catalog/CatalogList'
 import CatalogDetails from '../pages/catalog/CatalogDetails'
-import TestButtons from '../common/buttons/TestButtons'
+import ServerError from '../pages/admin/server/ServerError'
+
+// Navigation history of browser agent
+export const history = createBrowserHistory()
 
 function App() {
 	return (
 		<>
-			<Switch>
-				<Route exact path='/errors/test-errors' component={TestButtons} />
-				<Route exact path='/products' component={CatalogList} />
-				<Route exact path='/products/:productId' component={CatalogDetails} />
-			</Switch>
+			<Router history={history}>
+				<Switch>
+					<Route exact path='/server/server-error' component={ServerError} />
+					<Route exact path='/products' component={CatalogList} />
+					<Route exact path='/products/:productId' component={CatalogDetails} />
+					<Route path='/errors/test-errors' component={TestButtons} />
+				</Switch>
+			</Router>
 		</>
 	)
 }

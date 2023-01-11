@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, AxiosError } from 'axios'
 import { toast } from 'react-toastify'
-// import { history } from '../../index'
 
+import { history } from '../layout/App';
 import { getValidationError } from './helpers'
 
 axios.defaults.baseURL = 'http://localhost:5000/api/'
@@ -24,7 +24,11 @@ axios.interceptors.response.use(serverResponse => {
          toast.warn(data.title)
          break
       case 500:
-         toast.error(data.title)
+         // toast.error(data.title)
+         history.push({
+             pathname: '/server/server-error',
+             state: { error: data }
+         })
          break
       default:
          break
