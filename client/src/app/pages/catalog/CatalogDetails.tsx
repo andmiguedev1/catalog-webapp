@@ -15,9 +15,9 @@ function CatalogDetails() {
 	const [loadCatalog, setLoadCatalog] = useState(true)
 
 	useEffect(() => {
-		agent.Catalog.details(parseInt(productId))
+		agent.Endpoints.singleDisplay(parseInt(productId))
 			.then(catalogInfo => setCatalogInfo(catalogInfo))
-			.catch(error => console.warn(error.response))
+			.catch(error => console.warn(error))
 			.finally(() => setLoadCatalog(false))
 	}, [productId])
 

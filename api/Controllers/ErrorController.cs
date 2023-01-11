@@ -20,7 +20,7 @@ namespace api.Controllers
       [HttpGet("unauthorized")]
       public ActionResult GetUnauthorizedError()
       {
-         return Unauthorized();
+         return Unauthorized(new ProblemDetails { Title = "Unauthorized Access! You need valid credentials to see this page" });
       }
 
       [HttpGet("validation-error")]

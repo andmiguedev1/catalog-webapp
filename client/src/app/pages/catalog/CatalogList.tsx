@@ -11,7 +11,7 @@ function Catalog() {
 	const [products, setProducts] = useState<Product[]>([])
 
 	useEffect(() => {
-		agent.Catalog.list().then(products => setProducts(products))
+		agent.Endpoints.displayAll().then(products => setProducts(products))
 	}, [])
 
 	return (
