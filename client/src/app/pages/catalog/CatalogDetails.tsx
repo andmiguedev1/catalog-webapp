@@ -17,7 +17,7 @@ function CatalogDetails() {
 	useEffect(() => {
 		agent.Catalog.details(parseInt(productId))
 			.then(catalogInfo => setCatalogInfo(catalogInfo))
-			.catch(error => console.warn(error))
+			.catch(error => console.warn(error.response))
 			.finally(() => setLoadCatalog(false))
 	}, [productId])
 

@@ -17,7 +17,7 @@ namespace api.Controllers
       }
 
       [HttpGet]
-      // api/Products
+      // api/products
       public async Task<ActionResult<List<Product>>> GetProducts()
       {
          // Return all products asynchronously
@@ -25,11 +25,21 @@ namespace api.Controllers
       }
 
       [HttpGet("{id}")]
-      // api/Products/1
+      // api/products/1
       public async Task<ActionResult<Product>> GetProduct(int id)
       {
-         // Return single product asynchronously
-         return await _context.Products.FindAsync(id);
+
+         // Find a single product asynchronously
+         var singleProduct = await _context.Products.FindAsync(id);
+
+         // Prevents a 204 Server Response if an
+         // invalid product id is passed
+         if (singleProduct == null)
+         {
+            return NotFound();
+         }
+
+         return singleProduct;
       }
    }
 }

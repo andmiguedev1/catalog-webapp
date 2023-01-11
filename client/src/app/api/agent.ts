@@ -16,8 +16,16 @@ const Catalog = {
    details: (productId: number) => requestType.get(`products/${productId}`)
 }
 
+const SampleRequests = {
+   badRequest: () => requestType.get('Error/bad-request'),
+   unauthorized: () => requestType.get('Error/unauthorized'),
+   notFound: () => requestType.get('Error/not-found'),
+   serverError: () => requestType.get('Error/server-error')
+}
+
 const agent = {
-   Catalog
+   Catalog,
+   SampleRequests
 }
 
 export default agent;
