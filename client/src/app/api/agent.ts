@@ -1,6 +1,8 @@
 import axios, { AxiosResponse, AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 
+import { getValidationError } from './helpers'
+
 axios.defaults.baseURL = 'http://localhost:5000/api/'
 
 const APIResponse = (response: AxiosResponse) => response.data
@@ -9,11 +11,12 @@ axios.interceptors.response.use(serverResponse => {
    return serverResponse
 }, (error: AxiosError) => {
    
-   // Display error message to user
    const { data, status } = error.response!
-
-   switch (status) {
-      case 400:
+   
+   // Display error message to user
+    switch (status) {
+      case 400: 
+         getValidationError(data)
          toast.info(data.title)
          break
       case 401:
@@ -23,7 +26,7 @@ axios.interceptors.response.use(serverResponse => {
          toast.error(data.title)
          break
       default:
-         break      
+         break
    }
 
    // Caught error execptions in the console
@@ -43,6 +46,7 @@ const Endpoints = {
 }
 
 const CommonErrors = {
+   invalidRequest: () => requestType.get('Error/validation-error').catch(error => console.info(error)),
    badRequest: () => requestType.get('Error/bad-request').catch(error => console.warn(error)),
    unauthorized: () => requestType.get('Error/unauthorized').catch(error => console.warn(error)),
    notFound: () => requestType.get('Error/not-found').catch(error => console.warn(error)),
