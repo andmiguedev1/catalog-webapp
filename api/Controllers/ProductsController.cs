@@ -33,7 +33,7 @@ namespace api.Controllers
          var singleProduct = await _context.Products.FindAsync(id);
 
          // Prevents a 204 Server Response if an
-         // invalid product id is passed
+         // invalid product id is
          if (singleProduct == null)
          {
             return NotFound();

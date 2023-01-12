@@ -8,9 +8,10 @@ import {
 	TableRow,
 	TableCell,
 } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
 
 import { Product } from '../../models/product'
+
+import LoadingIndicator from '../../common/loading/LoadingIndicator'
 
 interface Props {
 	catalogInfo: Product | null
@@ -20,7 +21,7 @@ function ProductDetails({ catalogInfo }: Props) {
 	return (
 		<>
 			{!catalogInfo ? (
-				<LoadingButton loading={true} />
+				<LoadingIndicator message='Loading catalog info...' />
 			) : (
 				<Grid container spacing={6}>
 					<Grid item xs={6}>

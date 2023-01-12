@@ -4,11 +4,15 @@ import { toast } from 'react-toastify'
 import { history } from '../layout/App';
 import { getValidationError } from './helpers'
 
+const delayRequest = () => new Promise(resolve => setTimeout(resolve, 500))
+
 axios.defaults.baseURL = 'http://localhost:5000/api/'
 
 const APIResponse = (response: AxiosResponse) => response.data
 
-axios.interceptors.response.use(serverResponse => {
+axios.interceptors.response.use(async serverResponse => {
+   await delayRequest()
+   
    return serverResponse
 }, (error: AxiosError) => {
    
