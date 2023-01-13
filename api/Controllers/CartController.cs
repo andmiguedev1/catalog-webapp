@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using api.DTO;
 using api.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +20,7 @@ namespace api.Controllers
       }
 
       [HttpGet]
-      public async Task<ActionResult<Cart>> GetShoppingCart()
+      public async Task<ActionResult<CartDto>> GetShoppingCart()
       {
          var shoppingCart = await GetShoppingItems();
 
@@ -28,7 +30,23 @@ namespace api.Controllers
             return NotFound();
          };
 
-         return shoppingCart;
+         // Set the structure return by the API
+         // using Data Transfer Objects
+         return new CartDto
+         {
+            Id = shoppingCart.Id,
+            CustomerId = shoppingCart.CustomerId,
+            CartItems = shoppingCart.CartItems.Select(cartItem => new CartItemDto
+            {
+               ProductId = cartItem.ProductId,
+               Name = cartItem.Product.Name,
+               Image = cartItem.Product.Image,
+               Brand = cartItem.Product.Brand,
+               Type = cartItem.Product.Type,
+               Price = cartItem.Product.Price,
+               Quantity = cartItem.Quantity
+            }).ToList()
+         };
       }
 
       [HttpPost]
