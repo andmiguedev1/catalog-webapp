@@ -30,14 +30,11 @@ namespace api.Entities
 
       public void RemoveCartItem(int productId, int quantity)
       {
-        // 
-        var currentCart = CartItems.FirstOrDefault(cartItem => cartItem.ProductId == productId);
-        
-        //
-        if (currentCart == null) return;
+         var currentCart = CartItems.FirstOrDefault(cartItem => cartItem.ProductId == productId);
 
-        //
-        currentCart.Quantity -= quantity;
+         if (currentCart == null) return;
+
+         currentCart.Quantity -= quantity;
       }
    }
 }
