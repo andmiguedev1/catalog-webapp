@@ -13,7 +13,7 @@ function Catalog() {
 	const [products, setProducts] = useState<Product[]>([])
 
 	useEffect(() => {
-		agent.Endpoints.displayAll()
+		agent.CatalogRoutes.displayAll()
 			.then(products => setProducts(products))
 			.catch(error => console.log(error))
 			.finally(() => setLoadingIcon(false))

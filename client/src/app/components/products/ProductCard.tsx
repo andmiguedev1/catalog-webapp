@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 import {
 	Card,
 	CardHeader,
@@ -8,7 +10,9 @@ import {
 	Typography,
 	Button,
 } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
 
+import agent from '../../api/agent'
 import { Product } from '../../models/product'
 
 interface Props {
@@ -16,6 +20,15 @@ interface Props {
 }
 
 function ProductCard({ product }: Props) {
+	const [loadProduct, setLoadProduct] = useState(false)
+
+	function handleAddProduct(productId: number) {
+		setLoadProduct(true)
+		agent.CartRoutes.addItemToShoppingCart(productId)
+			.catch(error => console.warn(error))
+			.finally(() => setLoadProduct(false))
+	}
+
 	return (
 		<>
 			<Card>
@@ -37,9 +50,15 @@ function ProductCard({ product }: Props) {
 					</Typography>
 				</CardContent>
 				<CardActions>
-					<Button size='small' variant='contained' fullWidth={true}>
+					<LoadingButton
+						loading={loadProduct}
+						onClick={() => handleAddProduct(product.id)}
+						size='small'
+						variant='contained'
+						fullWidth={true}
+					>
 						Add to cart
-					</Button>
+					</LoadingButton>
 					<Button size='small' href={`/products/${product.id}`}>
 						View
 					</Button>

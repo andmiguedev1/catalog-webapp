@@ -13,7 +13,7 @@ function CatalogDetails() {
 	const [catalogInfo, setCatalogInfo] = useState<Product | null>(null)
 
 	useEffect(() => {
-		agent.Endpoints.singleDisplay(parseInt(productId))
+		agent.CatalogRoutes.singleDisplay(parseInt(productId))
 			.then(catalogInfo => setCatalogInfo(catalogInfo))
 			.catch(error => console.warn(error))
 	}, [productId])

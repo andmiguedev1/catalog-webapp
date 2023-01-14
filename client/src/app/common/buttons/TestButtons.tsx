@@ -9,7 +9,7 @@ function TestButtons() {
 	const [invalidErrors, setInvalidErrors] = useState<string[]>([])
 
 	async function displayErrors() {
-		agent.CommonErrors.invalidRequest()
+		agent.ErrorRoutes.invalidRequest()
 			.then(error => console.log(error))
 			.catch(invalidErrors => setInvalidErrors(invalidErrors))
 	}
@@ -24,24 +24,21 @@ function TestButtons() {
 					<Button variant='contained' onClick={displayErrors}>
 						Invalid Request
 					</Button>
-					<Button
-						variant='contained'
-						onClick={() => agent.CommonErrors.badRequest()}
-					>
+					<Button variant='contained' onClick={() => agent.ErrorRoutes.badRequest()}>
 						Bad Request
 					</Button>
 					<Button
 						variant='contained'
-						onClick={() => agent.CommonErrors.unauthorized()}
+						onClick={() => agent.ErrorRoutes.unauthorized()}
 					>
 						Unauthorized
 					</Button>
-					<Button variant='contained' onClick={() => agent.CommonErrors.notFound()}>
+					<Button variant='contained' onClick={() => agent.ErrorRoutes.notFound()}>
 						Not Found
 					</Button>
 					<Button
 						variant='contained'
-						onClick={() => agent.CommonErrors.serverError()}
+						onClick={() => agent.ErrorRoutes.serverError()}
 					>
 						Server Error
 					</Button>

@@ -1,14 +1,12 @@
-import axios, { AxiosResponse, AxiosError } from 'axios'
+import axios, { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 
 import { history } from '../layout/App';
-import { getValidationError } from './helpers'
-
-const delayRequest = () => new Promise(resolve => setTimeout(resolve, 500))
+import { delayRequest, getValidationError } from './helpers'
+import { CatalogRoutes, ErrorRoutes, CartRoutes } from './routes/routes';
 
 axios.defaults.baseURL = 'http://localhost:5000/api/'
-
-const APIResponse = (response: AxiosResponse) => response.data
+axios.defaults.withCredentials = true
 
 axios.interceptors.response.use(async serverResponse => {
    await delayRequest()
@@ -42,29 +40,10 @@ axios.interceptors.response.use(async serverResponse => {
    return Promise.reject(error.response)
 })
 
-const requestType = {
-   get: (url: string) => axios.get(url).then(APIResponse),
-   post: (url: string, body: {}) => axios.post(url, body).then(APIResponse),
-   put: (url: string, body: {}) => axios.put(url, body).then(APIResponse),
-   delete: (url: string) => axios.delete(url).then(APIResponse)
-}
-
-const Endpoints = {
-   displayAll: () => requestType.get('products'),
-   singleDisplay: (productId: number) => requestType.get(`products/${productId}`)
-}
-
-const CommonErrors = {
-   invalidRequest: () => requestType.get('Error/validation-error'),
-   badRequest: () => requestType.get('Error/bad-request').catch(error => console.warn(error)),
-   unauthorized: () => requestType.get('Error/unauthorized').catch(error => console.warn(error)),
-   notFound: () => requestType.get('Error/not-found').catch(error => console.warn(error)),
-   serverError: () => requestType.get('Error/server-error').catch(error => console.error(error))
-}
-
 const agent = {
-   Endpoints,
-   CommonErrors
+   CartRoutes,
+   CatalogRoutes,
+   ErrorRoutes
 }
 
 export default agent;
