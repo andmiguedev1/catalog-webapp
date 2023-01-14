@@ -1,11 +1,12 @@
 import { Button, Divider, Paper, Typography } from '@mui/material'
 import { Container } from '@mui/system'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Layout from '../../../layout/Layout'
 
 function ServerError() {
-	const history = useHistory()
-	const { state } = useLocation<any>()
+	const navigate = useNavigate()
+	const location = useLocation()
+	const { state } = location
 
 	return (
 		<Layout>
@@ -24,7 +25,7 @@ function ServerError() {
 				<Button
 					variant='contained'
 					color='inherit'
-					onClick={() => history.push('/products')}
+					onClick={() => navigate('/products')}
 					sx={{ marginBlock: 2 }}
 				>
 					Go Back to Catalog

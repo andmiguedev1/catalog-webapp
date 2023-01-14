@@ -1,7 +1,6 @@
 import axios, { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 
-import { history } from '../layout/App';
 import { delayRequest, getValidationError } from './helpers'
 import { CatalogRoutes, ErrorRoutes, CartRoutes } from './routes/routes';
 
@@ -25,12 +24,11 @@ axios.interceptors.response.use(async serverResponse => {
       case 401:
          toast.warn(data.title)
          break
-      case 500:
-         // toast.error(data.title)
-         history.push({
-             pathname: '/server/server-error',
-             state: { error: data }
-         })
+       case 500:
+         //  navigate('/server/server-error', {
+         //     state: { error: data }
+         //  })
+         toast.error(data.title)
          break
       default:
          break

@@ -9,11 +9,11 @@ import Layout from '../../layout/Layout'
 import agent from '../../api/agent'
 
 function CatalogDetails() {
-	const { productId } = useParams<{ productId: string }>()
+	const { productId } = useParams()
 	const [catalogInfo, setCatalogInfo] = useState<Product | null>(null)
 
 	useEffect(() => {
-		agent.CatalogRoutes.singleDisplay(parseInt(productId))
+		agent.CatalogRoutes.singleDisplay(parseInt(productId!))
 			.then(catalogInfo => setCatalogInfo(catalogInfo))
 			.catch(error => console.warn(error))
 	}, [productId])
