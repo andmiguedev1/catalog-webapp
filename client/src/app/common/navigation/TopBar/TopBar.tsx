@@ -6,10 +6,14 @@ import {
 	FormControlLabel,
 	Switch,
 	Box,
+	IconButton,
+	Badge,
 } from '@mui/material'
 
-import LightMode from '@mui/icons-material/LightMode'
-import DarkMode from '@mui/icons-material/DarkMode'
+import { LightMode, DarkMode, ShoppingCart } from '@mui/icons-material'
+
+import { updateCartQuantity } from '../../../utils'
+import { useCartContext } from '../../../state/context/cartContext'
 
 interface Props {
 	darkMode: boolean
@@ -17,27 +21,45 @@ interface Props {
 }
 
 function TopBar({ darkMode, toggleThemeMode }: Props) {
+	const { shoppingCart } = useCartContext()
+	const customerCart = updateCartQuantity(shoppingCart)
+
 	return (
-		<AppBar position='static' sx={{ marginBottom: 4 }}>
-			<Toolbar sx={{ display: 'flex' }}>
-				<Box>
-					<Typography variant='h6' sx={{ paddingRight: 2 }}>
+		<Box sx={{ flexGrow: 1 }}>
+			<AppBar position='static' sx={{ marginBottom: 4 }}>
+				<Toolbar>
+					<Typography
+						variant='h6'
+						noWrap
+						component='div'
+						sx={{ display: { xs: 'none', sm: 'block' } }}
+					>
 						Online Catalog
 					</Typography>
-				</Box>
-				{!darkMode ? (
-					<LightMode htmlColor='#000' />
-				) : (
-					<DarkMode htmlColor='#fff' />
-				)}
-				<FormGroup sx={{ paddingInline: 1 }}>
-					<FormControlLabel
-						control={<Switch checked={darkMode} onChange={toggleThemeMode} />}
-						label={darkMode ? 'dark mode' : 'light mode'}
-					/>
-				</FormGroup>
-			</Toolbar>
-		</AppBar>
+					<Box sx={{ flexGrow: 1 }} />
+					<Box sx={{ paddingInline: 1 }} />
+					{!darkMode ? (
+						<LightMode htmlColor='#000' />
+					) : (
+						<DarkMode htmlColor='#fff' />
+					)}
+
+					<FormGroup sx={{ paddingInline: 1 }}>
+						<FormControlLabel
+							control={<Switch checked={darkMode} onChange={toggleThemeMode} />}
+							label=''
+						/>
+					</FormGroup>
+					<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+						<IconButton size='large' color='inherit'>
+							<Badge badgeContent={customerCart} color='error'>
+								<ShoppingCart />
+							</Badge>
+						</IconButton>
+					</Box>
+				</Toolbar>
+			</AppBar>
+		</Box>
 	)
 }
 

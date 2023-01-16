@@ -16,18 +16,23 @@ import { useCatalogContext } from '../../state/context/catalogContext'
 
 import agent from '../../api/agent'
 import { Product } from '../../models/product'
+import { useCartContext } from '../../state/context/cartContext'
 
 interface Props {
 	product: Product
 }
 
 function ProductCard({ product }: Props) {
-	const { loadCatalog } = useCatalogContext()
+	const { loadCatalog, setLoadCatalog } = useCatalogContext()
+	const { setShoppingCart } = useCartContext()
 	//
 	function handleAddProduct(productId: number) {
-		agent.CartRoutes.addItemToShoppingCart(productId).catch(error =>
-			console.warn(error),
-		)
+		setLoadCatalog(loadCatalog)
+		//
+		agent.CartRoutes.addItemToShoppingCart(productId)
+			.then(currentCart => setShoppingCart(currentCart))
+			.catch(error => console.warn(error))
+			.finally(() => setLoadCatalog(!loadCatalog))
 	}
 
 	return (

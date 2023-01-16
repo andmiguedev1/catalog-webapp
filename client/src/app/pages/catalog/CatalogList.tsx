@@ -8,7 +8,6 @@ import { Product } from '../../models/product'
 
 import Layout from '../../layout/Layout'
 import ProductsList from '../../components/products/ProductsList'
-import LoadingIndicator from '../../common/loading/LoadingIndicator'
 
 function Catalog() {
 	const { loadCatalog, setLoadCatalog } = useCatalogContext()
@@ -16,20 +15,15 @@ function Catalog() {
 
 	useEffect(() => {
 		agent.CatalogRoutes.displayAll()
-			.then(products => setProducts(products))
+			.then(storeProducts => setProducts(storeProducts))
 			.catch(error => console.log(error))
 			.finally(() => setLoadCatalog(!loadCatalog))
-		// eslint-disable-next-line
-	}, [])
+	}, [setProducts])
 
 	return (
 		<Layout>
 			<Container>
-				{loadCatalog ? (
-					<LoadingIndicator message='Loading catalog...' />
-				) : (
-					<ProductsList products={products} />
-				)}
+				<ProductsList products={products} />
 			</Container>
 		</Layout>
 	)

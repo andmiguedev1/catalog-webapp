@@ -1,36 +1,33 @@
-import { useEffect, useState } from 'react'
-import { Container, Typography } from '@mui/material'
-
-import { Cart } from '../../models/cart'
+import { useEffect } from 'react'
+import { Container } from '@mui/material'
 
 import agent from '../../api/agent'
+import { useCartContext } from '../../state/context/cartContext'
 
-import LoadingIndicator from '../../common/loading/LoadingIndicator'
 import Layout from '../../layout/Layout'
 import ShoppingCart from '../../components/cart/ShoppingCart'
+import { useCatalogContext } from '../../state/context/catalogContext'
+import LoadingIndicator from '../../common/loading/LoadingIndicator'
 
 function CartList() {
-	const [loadShopItems, setLoadShopItems] = useState(true)
-	const [shoppingList, setShoppingList] = useState<Cart | null>(null)
+	const { loadCatalog, setLoadCatalog } = useCatalogContext()
+	const { shoppingCart: shoppingList, setShoppingCart } = useCartContext()
 
 	useEffect(() => {
 		agent.CartRoutes.getShoppingCart()
-			.then(shoppingList => setShoppingList(shoppingList))
+			.then(shoppingCart => setShoppingCart(shoppingCart))
 			.catch(error => console.warn(error))
-			.finally(() => setLoadShopItems(false))
-	}, [])
-
-	if (loadShopItems) return <LoadingIndicator message='Loading shopping list' />
-
-	if (!shoppingList)
-		return (
-			<Typography variant='h3'>There are no items in the shopping cart</Typography>
-		)
+			.finally(() => setLoadCatalog(!loadCatalog))
+	}, [setShoppingCart])
 
 	return (
 		<Layout>
 			<Container>
-				<ShoppingCart shoppingList={shoppingList} />
+				{loadCatalog ? (
+					<LoadingIndicator message='Loading Cart...' />
+				) : (
+					<ShoppingCart shoppingList={shoppingList} />
+				)}
 			</Container>
 		</Layout>
 	)
