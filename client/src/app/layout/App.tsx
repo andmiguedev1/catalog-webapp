@@ -17,9 +17,8 @@ function App() {
 				<CartProvider>
 					<Routes>
 						<Route path='/' element={<Navigate to='/products' replace />} />
-						<Route path='products' element={<CatalogList />}>
-							<Route path=':productId' element={<CatalogDetails />} />
-						</Route>
+						<Route path='products' element={<CatalogList />} />
+						<Route path='products/:productId' element={<CatalogDetails />} />
 						<Route path='/cart' element={<CartList />} />
 						<Route path='/server/server-error' element={<ServerError />} />
 						<Route path='/errors/test-errors' element={<TestButtons />} />

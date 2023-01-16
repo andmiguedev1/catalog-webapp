@@ -1,15 +1,19 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+
 import { Container } from '@mui/material'
 
-import { Product } from '../../models/product'
-
-import ProductDetails from '../../components/products/ProductDetails'
-import Layout from '../../layout/Layout'
 import agent from '../../api/agent'
+import { Product } from '../../models/product'
+import { useCatalogContext } from '../../state/context/catalogContext'
+
+import Layout from '../../layout/Layout'
+import ProductDetails from '../../components/products/ProductDetails'
+import LoadingIndicator from '../../common/loading/LoadingIndicator'
 
 function CatalogDetails() {
 	const { productId } = useParams()
+	const { loadCatalog } = useCatalogContext()
 	const [catalogInfo, setCatalogInfo] = useState<Product | null>(null)
 
 	useEffect(() => {
@@ -21,7 +25,11 @@ function CatalogDetails() {
 	return (
 		<Layout>
 			<Container>
-				<ProductDetails catalogInfo={catalogInfo} />
+				{loadCatalog ? (
+					<LoadingIndicator message='Loading catalog info...' />
+				) : (
+					<ProductDetails catalogInfo={catalogInfo} />
+				)}
 			</Container>
 		</Layout>
 	)

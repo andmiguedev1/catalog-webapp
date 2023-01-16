@@ -11,7 +11,7 @@ export const CatalogContext =
 export function useCatalogContext() {
 	const context = useContext(CatalogContext)
 
-	if (context == undefined) {
+	if (context === undefined) {
 		throw Error('Error! React cannot access CatalogProvider.')
 	}
 

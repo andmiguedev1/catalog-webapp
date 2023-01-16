@@ -13,7 +13,7 @@ export const CartContext =
 export function useCartContext() {
 	const context = useContext(CartContext)
 
-	if (context == undefined) {
+	if (context === undefined) {
 		throw Error('Error! React cannot access CartProvider.')
 	}
 

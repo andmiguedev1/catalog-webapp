@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import {
 	Card,
@@ -12,6 +12,8 @@ import {
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 
+import { useCatalogContext } from '../../state/context/catalogContext'
+
 import agent from '../../api/agent'
 import { Product } from '../../models/product'
 
@@ -20,13 +22,12 @@ interface Props {
 }
 
 function ProductCard({ product }: Props) {
-	const [loadProduct, setLoadProduct] = useState(false)
-
+	const { loadCatalog } = useCatalogContext()
+	//
 	function handleAddProduct(productId: number) {
-		setLoadProduct(true)
-		agent.CartRoutes.addItemToShoppingCart(productId)
-			.catch(error => console.warn(error))
-			.finally(() => setLoadProduct(false))
+		agent.CartRoutes.addItemToShoppingCart(productId).catch(error =>
+			console.warn(error),
+		)
 	}
 
 	return (
@@ -51,7 +52,7 @@ function ProductCard({ product }: Props) {
 				</CardContent>
 				<CardActions>
 					<LoadingButton
-						loading={loadProduct}
+						loading={loadCatalog}
 						onClick={() => handleAddProduct(product.id)}
 						size='small'
 						variant='contained'
@@ -59,7 +60,7 @@ function ProductCard({ product }: Props) {
 					>
 						Add to cart
 					</LoadingButton>
-					<Button size='small' href={`/products/${product.id}`}>
+					<Button size='small' component={Link} to={`/products/${product.id}`}>
 						View
 					</Button>
 				</CardActions>
