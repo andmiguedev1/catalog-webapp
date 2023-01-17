@@ -7,26 +7,33 @@ import { useCatalogContext } from '../../state/context/catalogContext'
 import { Product } from '../../models/product'
 
 import Layout from '../../layout/Layout'
+import LoadingIndicator from '../../common/loading/LoadingIndicator'
 import ProductsList from '../../components/products/ProductsList'
 
-function Catalog() {
+function CatalogList() {
 	const { loadCatalog, setLoadCatalog } = useCatalogContext()
 	const [products, setProducts] = useState<Product[]>([])
 
 	useEffect(() => {
-		agent.CatalogRoutes.displayAll()
-			.then(storeProducts => setProducts(storeProducts))
+		setLoadCatalog(loadCatalog)
+		agent.CatalogRoutes.getRecentProducts()
+			.then(products => setProducts(products))
 			.catch(error => console.log(error))
 			.finally(() => setLoadCatalog(!loadCatalog))
-	}, [setProducts])
+		// eslint-disable-next-line
+	}, [])
 
 	return (
 		<Layout>
 			<Container>
-				<ProductsList products={products} />
+				{loadCatalog ? (
+					<LoadingIndicator message='Loading Catalog...' />
+				) : (
+					<ProductsList products={products} />
+				)}
 			</Container>
 		</Layout>
 	)
 }
 
-export default Catalog
+export default CatalogList

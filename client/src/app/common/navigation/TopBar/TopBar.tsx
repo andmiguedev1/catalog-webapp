@@ -14,6 +14,7 @@ import { LightMode, DarkMode, ShoppingCart } from '@mui/icons-material'
 
 import { updateCartQuantity } from '../../../utils'
 import { useCartContext } from '../../../state/context/cartContext'
+import { Link } from 'react-router-dom'
 
 interface Props {
 	darkMode: boolean
@@ -51,7 +52,7 @@ function TopBar({ darkMode, toggleThemeMode }: Props) {
 						/>
 					</FormGroup>
 					<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-						<IconButton size='large' color='inherit'>
+						<IconButton size='large' color='inherit' component={Link} to='/cart'>
 							<Badge badgeContent={customerCart} color='error'>
 								<ShoppingCart />
 							</Badge>

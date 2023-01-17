@@ -6,28 +6,21 @@ import { useCartContext } from '../../state/context/cartContext'
 
 import Layout from '../../layout/Layout'
 import ShoppingCart from '../../components/cart/ShoppingCart'
-import { useCatalogContext } from '../../state/context/catalogContext'
-import LoadingIndicator from '../../common/loading/LoadingIndicator'
 
 function CartList() {
-	const { loadCatalog, setLoadCatalog } = useCatalogContext()
 	const { shoppingCart: shoppingList, setShoppingCart } = useCartContext()
 
 	useEffect(() => {
 		agent.CartRoutes.getShoppingCart()
-			.then(shoppingCart => setShoppingCart(shoppingCart))
+			.then(shoppingList => setShoppingCart(shoppingList))
 			.catch(error => console.warn(error))
-			.finally(() => setLoadCatalog(!loadCatalog))
+		// eslint-disable-next-line
 	}, [setShoppingCart])
 
 	return (
 		<Layout>
 			<Container>
-				{loadCatalog ? (
-					<LoadingIndicator message='Loading Cart...' />
-				) : (
-					<ShoppingCart shoppingList={shoppingList} />
-				)}
+				<ShoppingCart shoppingList={shoppingList} />
 			</Container>
 		</Layout>
 	)

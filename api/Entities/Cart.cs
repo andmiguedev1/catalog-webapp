@@ -32,9 +32,15 @@ namespace api.Entities
       {
          var currentCart = CartItems.FirstOrDefault(cartItem => cartItem.ProductId == productId);
 
-         if (currentCart == null) return;
+         if (currentCart != null)
+         {
+            currentCart.Quantity -= quantity;
+         }
 
-         currentCart.Quantity -= quantity;
+         if (currentCart.Quantity == 0)
+         {
+            CartItems.Remove(currentCart);
+         }
       }
    }
 }

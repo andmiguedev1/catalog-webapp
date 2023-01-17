@@ -2,13 +2,13 @@ import { requestType } from '../requests/requests'
 
 export const CartRoutes = {
    getShoppingCart: () => requestType.get('cart'),
-   addItemToShoppingCart: (productId: number, quantity: number = 1) => requestType.post(`cart?productId=${productId}&quantity=${quantity}`, {}),
-   removeItemFromShoppingCart: (productId: number, quantity: number = 1) => requestType.delete(`cart?productId=${productId}&quantity=${quantity}`)
+   addToShoppingCart: (productId: number, quantity: number = 1) => requestType.post(`cart?productId=${productId}&quantity=${quantity}`, {}),
+   removeFromShoppingCart: (productId: number, quantity: number) => requestType.delete(`cart?productId=${productId}&quantity=${quantity}`)
 }
 
 export const CatalogRoutes = {
-   displayAll: () => requestType.get('products'),
-   singleDisplay: (productId: number) => requestType.get(`products/${productId}`)
+   getRecentProducts: () => requestType.get('products'),
+   getSingleProduct: (productId: number) => requestType.get(`products/${productId}`)
 }
 
 export const ErrorRoutes = {

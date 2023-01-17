@@ -12,27 +12,25 @@ import {
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 
-import { useCatalogContext } from '../../state/context/catalogContext'
-
 import agent from '../../api/agent'
-import { Product } from '../../models/product'
+import { useCatalogContext } from '../../state/context/catalogContext'
 import { useCartContext } from '../../state/context/cartContext'
+
+import { Product } from '../../models/product'
 
 interface Props {
 	product: Product
 }
 
 function ProductCard({ product }: Props) {
-	const { loadCatalog, setLoadCatalog } = useCatalogContext()
+	const { loadCatalog } = useCatalogContext()
 	const { setShoppingCart } = useCartContext()
 	//
 	function handleAddProduct(productId: number) {
-		setLoadCatalog(loadCatalog)
 		//
-		agent.CartRoutes.addItemToShoppingCart(productId)
+		agent.CartRoutes.addToShoppingCart(productId)
 			.then(currentCart => setShoppingCart(currentCart))
 			.catch(error => console.warn(error))
-			.finally(() => setLoadCatalog(!loadCatalog))
 	}
 
 	return (
