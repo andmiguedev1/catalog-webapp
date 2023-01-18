@@ -7,9 +7,15 @@ import {
 	TableRow,
 } from '@mui/material'
 
+import { useCartContext } from '../../state/context/cartContext'
+import { getSubtotalCost, setCurrencyFormat } from '../../utils'
+
 function SummaryCart() {
-	const subtotal = 0
-	const deliveryFee = 0
+	const { shoppingCart } = useCartContext()
+	//  Calculate subtotal amount of customer's cart
+	const subtotal = getSubtotalCost(shoppingCart)
+	// Display shipping fee if subtotal is less than 50
+	const shippingFee = subtotal > 50 ? 0 : 7
 
 	return (
 		<TableContainer component={Paper} variant={'outlined'}>
@@ -17,15 +23,17 @@ function SummaryCart() {
 				<TableBody>
 					<TableRow>
 						<TableCell colSpan={2}>Subtotal</TableCell>
-						<TableCell align='right'>{subtotal}</TableCell>
+						<TableCell align='right'>{setCurrencyFormat(subtotal)}</TableCell>
 					</TableRow>
 					<TableRow>
 						<TableCell colSpan={2}>Shipping Fee</TableCell>
-						<TableCell align='right'>{deliveryFee}</TableCell>
+						<TableCell align='right'>{setCurrencyFormat(shippingFee)}</TableCell>
 					</TableRow>
 					<TableRow>
 						<TableCell colSpan={2}>Total</TableCell>
-						<TableCell align='right'>{subtotal + deliveryFee}</TableCell>
+						<TableCell align='right'>
+							{setCurrencyFormat(subtotal + shippingFee)}
+						</TableCell>
 					</TableRow>
 					<TableRow>
 						<TableCell>
