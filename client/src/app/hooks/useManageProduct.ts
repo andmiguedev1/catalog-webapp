@@ -8,7 +8,7 @@ import { Product } from '../models/product'
 export const useManageProduct = () => {
    const [loadProducts, setLoadProducts] = useState(true)
    const [storeProducts, setStoreProducts] = useState<Product[]>([])
-   const [storeProduct, setStoreProduct] = useState<Product>()
+   const [storeProduct, setStoreProduct] = useState<Product | null>(null)
 
    const fetchCatalogProducts = async () => {
       try {

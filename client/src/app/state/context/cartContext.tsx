@@ -3,7 +3,9 @@ import { Cart } from '../../models/cart'
 
 interface CartContextValue {
 	shoppingCart: Cart | null
-	setShoppingCart: (cart: Cart | null) => void
+	setShoppingCart: (cart: Cart) => void
+	updateCart: boolean
+	setUpdateCart: (updateCart: boolean) => void
 	removeCartItem: (productId: number, quantity: number) => void
 }
 
@@ -21,6 +23,7 @@ export function useCartContext() {
 }
 
 export function CartProvider({ children }: PropsWithChildren<any>) {
+	const [updateCart, setUpdateCart] = useState(false)
 	const [shoppingCart, setShoppingCart] = useState<Cart | null>(null)
 
 	function removeCartItem(productId: number, quantity: number) {
@@ -47,7 +50,13 @@ export function CartProvider({ children }: PropsWithChildren<any>) {
 
 	return (
 		<CartContext.Provider
-			value={{ shoppingCart, setShoppingCart, removeCartItem }}
+			value={{
+				shoppingCart,
+				setShoppingCart,
+				updateCart,
+				setUpdateCart,
+				removeCartItem,
+			}}
 		>
 			{children}
 		</CartContext.Provider>
