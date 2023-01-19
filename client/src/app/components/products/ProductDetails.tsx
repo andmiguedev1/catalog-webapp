@@ -14,47 +14,43 @@ import { Product } from '../../models/product'
 import LoadingIndicator from '../../common/loading/LoadingIndicator'
 
 interface Props {
-	catalogInfo: Product | null
+	product: Product | undefined
 }
 
-function ProductDetails({ catalogInfo }: Props) {
+function ProductDetails({ product }: Props) {
 	return (
 		<>
-			{!catalogInfo ? (
-				<LoadingIndicator message='Loading catalog info...' />
+			{!product ? (
+				<LoadingIndicator message='Catalog Info...' />
 			) : (
 				<Grid container spacing={6}>
 					<Grid item xs={6}>
-						<img
-							src={catalogInfo.image}
-							alt={catalogInfo.name}
-							style={{ width: '100%' }}
-						/>
+						<img src={product.image} alt={product.name} style={{ width: '100%' }} />
 					</Grid>
 					<Grid item xs={6}>
-						<Typography variant='h3'>{catalogInfo.name}</Typography>
+						<Typography variant='h3'>{product.name}</Typography>
 						<Divider sx={{ marginBottom: 2 }} />
 						<Typography variant='h4' color='secondary'>
-							{catalogInfo.price.toFixed(2)}
+							{product.price.toFixed(2)}
 						</Typography>
 						<TableContainer>
 							<Table>
 								<TableBody>
 									<TableRow>
 										<TableCell>Item Name</TableCell>
-										<TableCell>{catalogInfo.name}</TableCell>
+										<TableCell>{product.name}</TableCell>
 									</TableRow>
 									<TableRow>
 										<TableCell>Item Type</TableCell>
-										<TableCell>{catalogInfo.brand}</TableCell>
+										<TableCell>{product.brand}</TableCell>
 									</TableRow>
 									<TableRow>
 										<TableCell>Item Brand</TableCell>
-										<TableCell>{catalogInfo.brand}</TableCell>
+										<TableCell>{product.brand}</TableCell>
 									</TableRow>
 									<TableRow>
 										<TableCell>Item Stock</TableCell>
-										<TableCell>{catalogInfo.quantity}</TableCell>
+										<TableCell>{product.quantity}</TableCell>
 									</TableRow>
 								</TableBody>
 							</Table>

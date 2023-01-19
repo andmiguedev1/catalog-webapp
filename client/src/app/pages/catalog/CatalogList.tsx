@@ -1,35 +1,28 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Container } from '@mui/material'
 
-import agent from '../../api/agent'
-import { useCatalogContext } from '../../state/context/catalogContext'
-
-import { Product } from '../../models/product'
+import { useManageProduct } from '../../hooks/useManageProduct'
 
 import Layout from '../../layout/Layout'
 import LoadingIndicator from '../../common/loading/LoadingIndicator'
 import ProductsList from '../../components/products/ProductsList'
 
 function CatalogList() {
-	const { loadCatalog, setLoadCatalog } = useCatalogContext()
-	const [products, setProducts] = useState<Product[]>([])
+	const { loadProducts, storeProducts, fetchCatalogProducts } =
+		useManageProduct()
 
 	useEffect(() => {
-		setLoadCatalog(loadCatalog)
-		agent.CatalogRoutes.getRecentProducts()
-			.then(products => setProducts(products))
-			.catch(error => console.log(error))
-			.finally(() => setLoadCatalog(!loadCatalog))
+		fetchCatalogProducts()
 		// eslint-disable-next-line
 	}, [])
 
 	return (
 		<Layout>
 			<Container>
-				{loadCatalog ? (
+				{loadProducts ? (
 					<LoadingIndicator message='Loading Catalog...' />
 				) : (
-					<ProductsList products={products} />
+					<ProductsList products={storeProducts} />
 				)}
 			</Container>
 		</Layout>

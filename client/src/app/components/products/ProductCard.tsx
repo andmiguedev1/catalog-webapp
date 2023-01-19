@@ -23,7 +23,7 @@ interface Props {
 }
 
 function ProductCard({ product }: Props) {
-	const { loadCatalog } = useCatalogContext()
+	// const { loadCatalog } = useCatalogContext()
 	const { setShoppingCart } = useCartContext()
 	//
 	function handleAddProduct(productId: number) {
@@ -55,7 +55,7 @@ function ProductCard({ product }: Props) {
 				</CardContent>
 				<CardActions>
 					<LoadingButton
-						loading={loadCatalog}
+						loading={false}
 						onClick={() => handleAddProduct(product.id)}
 						size='small'
 						variant='contained'

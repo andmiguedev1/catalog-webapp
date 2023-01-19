@@ -11,29 +11,16 @@ import {
 } from '@mui/material'
 import { Add, Delete, Remove } from '@mui/icons-material'
 
-import agent from '../../api/agent'
-import { useCartContext } from '../../state/context/cartContext'
+import { useManageCart } from '../../hooks/useManageCart'
 
 import { Cart } from '../../models/cart'
 
 interface Props {
-	shoppingList: Cart | null
+	cartList: Cart | null
 }
 
-function ShoppingCart({ shoppingList }: Props) {
-	const { setShoppingCart, removeCartItem } = useCartContext()
-
-	function removeCustomerItem(productId: number, quantity = 1) {
-		agent.CartRoutes.removeFromShoppingCart(productId, quantity)
-			.then(() => removeCartItem(productId, quantity))
-			.catch(error => console.warn(error))
-	}
-
-	function addCustomerItem(productId: number) {
-		agent.CartRoutes.addToShoppingCart(productId)
-			.then(currentCart => setShoppingCart(currentCart))
-			.catch(error => console.warn(error))
-	}
+function ShoppingCart({ cartList }: Props) {
+	const { addCustomerItem, removeCustomerItem } = useManageCart()
 
 	return (
 		<TableContainer component={Paper}>
@@ -48,7 +35,7 @@ function ShoppingCart({ shoppingList }: Props) {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{shoppingList?.cartItems.map(cartItem => (
+					{cartList?.cartItems.map(cartItem => (
 						<TableRow
 							key={cartItem.productId}
 							sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -67,7 +54,7 @@ function ShoppingCart({ shoppingList }: Props) {
 							<TableCell align='center'>
 								<IconButton
 									color='info'
-									onClick={() => removeCustomerItem(cartItem.productId)}
+									onClick={() => removeCustomerItem(cartItem.productId, 1)}
 								>
 									<Remove />
 								</IconButton>
@@ -97,7 +84,6 @@ function ShoppingCart({ shoppingList }: Props) {
 				</TableBody>
 			</Table>
 		</TableContainer>
-		
 	)
 }
 

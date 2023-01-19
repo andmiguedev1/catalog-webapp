@@ -7,11 +7,13 @@ import {
 	TableRow,
 } from '@mui/material'
 
-import { useCartContext } from '../../state/context/cartContext'
+import { useManageCart } from '../../hooks/useManageCart'
+
 import { getSubtotalCost, setCurrencyFormat } from '../../utils'
 
 function SummaryCart() {
-	const { shoppingCart } = useCartContext()
+	const { shoppingCart } = useManageCart()
+
 	//  Calculate subtotal amount of customer's cart
 	const subtotal = getSubtotalCost(shoppingCart)
 	// Display shipping fee if subtotal is less than 50
