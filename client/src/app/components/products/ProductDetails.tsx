@@ -13,22 +13,24 @@ import {
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 
-import { useCartContext } from '../../state/context/cartContext'
-
+import { useManageCart } from '../../hooks/useManageCart'
 import { Product } from '../../models/product'
-// import { CartItem } from '../../models/cart'
 
 import LoadingIndicator from '../../common/loading/LoadingIndicator'
-import { useManageCart } from '../../hooks/useManageCart'
 
 interface Props {
 	product: Product | null
-	// productItem: CartItem | undefined
+	// productItem: CartItem | null
 }
 
 function ProductDetails({ product }: Props) {
-	const { updateCart, setUpdateCart } = useCartContext()
-	const { cartQuantity, setCartQuantity, updateCustomerCart } = useManageCart()
+	const {
+		cartQuantity,
+		setCartQuantity,
+		updateCart,
+		setUpdateCart,
+		updateCustomerCart,
+	} = useManageCart()
 
 	// Change the number of product cart's quantity
 	function handleProductQty(event: ChangeEvent<HTMLInputElement>) {

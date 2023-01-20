@@ -9,7 +9,7 @@ import Layout from '../../layout/Layout'
 import ProductDetails from '../../components/products/ProductDetails'
 
 function CatalogDetails() {
-	const { productId } = useParams()
+	const { productId } = useParams<{ productId: string }>()
 
 	// const { shoppingCart, setCartQuantity, findProductInCart } = useManageCart()
 	const { storeProduct, fetchCatalogProduct } = useManageProduct()

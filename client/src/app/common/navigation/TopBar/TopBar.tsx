@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import {
 	AppBar,
 	Toolbar,
@@ -9,12 +10,10 @@ import {
 	IconButton,
 	Badge,
 } from '@mui/material'
-
 import { LightMode, DarkMode, ShoppingCart } from '@mui/icons-material'
 
+import { useAppSelector } from '../../../store/appStore'
 import { updateCartQuantity } from '../../../utils'
-import { useCartContext } from '../../../state/context/cartContext'
-import { Link } from 'react-router-dom'
 
 interface Props {
 	darkMode: boolean
@@ -22,7 +21,7 @@ interface Props {
 }
 
 function TopBar({ darkMode, toggleThemeMode }: Props) {
-	const { shoppingCart } = useCartContext()
+	const { cart: shoppingCart } = useAppSelector(state => state.cart)
 	const customerCart = updateCartQuantity(shoppingCart)
 
 	return (
