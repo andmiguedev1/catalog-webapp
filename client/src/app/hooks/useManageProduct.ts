@@ -2,19 +2,19 @@ import { useState } from 'react'
 
 import agent from '../api/agent'
 
-import { Product } from '../models/product'
-
+import { useAppDispatch, useAppSelector } from '../store/appStore';
+import { setProductItem, setProductItems } from '../store/reducers/productsSlice';
 
 export const useManageProduct = () => {
+   const dispatch = useAppDispatch()
+   const { product: storeProduct, products: storeProducts } = useAppSelector(state => state.products)
    const [loadProducts, setLoadProducts] = useState(true)
-   const [storeProducts, setStoreProducts] = useState<Product[]>([])
-   const [storeProduct, setStoreProduct] = useState<Product | null>(null)
 
    const fetchCatalogProducts = async () => {
       try {
          setLoadProducts(true)
          const recentProducts = await agent.CatalogRoutes.getRecentProducts()
-         return await setStoreProducts(recentProducts)
+         return await dispatch(setProductItems(recentProducts))
       } catch (message) {
          console.error(message)
       } finally {
@@ -26,7 +26,7 @@ export const useManageProduct = () => {
       try {
          setLoadProducts(true)
          const singleProduct = await agent.CatalogRoutes.getSingleProduct(parseInt(product))
-         return await setStoreProduct(singleProduct)
+         return await dispatch(setProductItem(singleProduct))
       } catch (message) {
          console.error(message)
       } finally {

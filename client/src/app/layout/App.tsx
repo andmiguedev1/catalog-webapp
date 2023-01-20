@@ -1,7 +1,5 @@
 import { Route, Routes, Navigate } from 'react-router-dom'
 
-import { CatalogProvider } from '../state/context/catalogContext'
-
 import CatalogList from '../pages/catalog/CatalogList'
 import CatalogDetails from '../pages/catalog/CatalogDetails'
 import CartList from '../pages/cart/CartList'
@@ -13,16 +11,14 @@ import TestButtons from '../common/buttons/TestButtons'
 function App() {
 	return (
 		<>
-			<CatalogProvider>
-				<Routes>
-					<Route path='/' element={<Navigate to='/products' replace />} />
-					<Route path='products' element={<CatalogList />} />
-					<Route path='products/:productId' element={<CatalogDetails />} />
-					<Route path='/cart' element={<CartList />} />
-					<Route path='/server/server-error' element={<ServerError />} />
-					<Route path='/errors/test-errors' element={<TestButtons />} />
-				</Routes>
-			</CatalogProvider>
+			<Routes>
+				<Route path='/' element={<Navigate to='/products' replace />} />
+				<Route path='products' element={<CatalogList />} />
+				<Route path='products/:productId' element={<CatalogDetails />} />
+				<Route path='/cart' element={<CartList />} />
+				<Route path='/server/server-error' element={<ServerError />} />
+				<Route path='/errors/test-errors' element={<TestButtons />} />
+			</Routes>
 		</>
 	)
 }
