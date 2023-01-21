@@ -7,21 +7,25 @@ import { Product } from '../../models/product'
 const productsAdapter = createEntityAdapter<Product>()
 
 export const fetchProductsAsync = createAsyncThunk<Product[]>(
-   'products/fetchProductsAsync', async () => {
+   'products/fetchProductsAsync', async (_, thunkAPI) => {
       try {
          return await agent.CatalogRoutes.getRecentProducts()
-      } catch (message) {
-         console.error(message)
+      } catch (message: any) {
+         return thunkAPI.rejectWithValue({
+            error: message.data
+         })
       }
    }
 )
 
 export const fetchProductAsync = createAsyncThunk<Product, number>(
-   'products/fetchProductAsync', async (productId) => {
+   'products/fetchProductAsync', async (productId, thunkAPI) => {
       try {
          return await agent.CatalogRoutes.getSingleProduct(productId)
-      } catch (message) {
-         console.error(message)
+      } catch (message: any) {
+         return thunkAPI.rejectWithValue({
+            error: message.data
+         })
       }
    }
 )
@@ -43,7 +47,8 @@ export const productsSlice = createSlice({
          state.status = 'idle'
          state.loadProducts = true
       })
-      builder.addCase(fetchProductsAsync.rejected, (state) => {
+      builder.addCase(fetchProductsAsync.rejected, (state, action) => {
+         console.log(action.payload)
          state.status = 'idle'
       })
       builder.addCase(fetchProductAsync.pending, (state) => {
@@ -53,7 +58,8 @@ export const productsSlice = createSlice({
          productsAdapter.upsertOne(state, action.payload)
          state.status = 'idle'
       })
-      builder.addCase(fetchProductAsync.rejected, (state) => {
+      builder.addCase(fetchProductAsync.rejected, (state, action) => {
+         console.log(action.payload)
          state.status = 'idle'
       })
    }) 
