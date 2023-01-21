@@ -20,7 +20,7 @@ interface Props {
 }
 
 function ProductCard({ product }: Props) {
-	const { addCustomerItem } = useManageCart()
+	const { cartStatus, addCustomerItem } = useManageCart()
 
 	return (
 		<>
@@ -44,7 +44,7 @@ function ProductCard({ product }: Props) {
 				</CardContent>
 				<CardActions>
 					<LoadingButton
-						loading={false}
+						loading={cartStatus.includes('pendingAddItem' + product.id)}
 						onClick={() => addCustomerItem(product.id)}
 						size='small'
 						variant='contained'

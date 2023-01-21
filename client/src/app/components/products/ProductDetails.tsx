@@ -24,13 +24,8 @@ interface Props {
 }
 
 function ProductDetails({ product }: Props) {
-	const {
-		cartQuantity,
-		setCartQuantity,
-		updateCart,
-		setUpdateCart,
-		updateCustomerCart,
-	} = useManageCart()
+	const { cartQuantity, setCartQuantity, updateCustomerCart, cartStatus } =
+		useManageCart()
 
 	// Change the number of product cart's quantity
 	function handleProductQty(event: ChangeEvent<HTMLInputElement>) {
@@ -43,12 +38,9 @@ function ProductDetails({ product }: Props) {
 
 	function handleUpdateProduct() {
 		try {
-			setUpdateCart(true)
 			updateCustomerCart(cartQuantity, product)
 		} catch (message) {
 			console.error(message)
-		} finally {
-			setUpdateCart(false)
 		}
 	}
 
@@ -102,7 +94,7 @@ function ProductDetails({ product }: Props) {
 							</Grid>
 							<Grid item xs={6}>
 								<LoadingButton
-									loading={updateCart}
+									loading={cartStatus.includes('pending')}
 									sx={{ height: '55px' }}
 									color='primary'
 									size='large'
