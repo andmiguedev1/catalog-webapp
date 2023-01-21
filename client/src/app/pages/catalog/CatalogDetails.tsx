@@ -21,9 +21,12 @@ function CatalogDetails() {
 		//	setCartQuantity(cartProduct.quantity)
 		// }
 
-		fetchCatalogProduct(productId!)
+		if (!storeProduct) {
+			fetchCatalogProduct(productId!)
+		}
+
 		// eslint-disable-next-line
-	}, [productId])
+	}, [productId, storeProduct])
 
 	return (
 		<Layout>

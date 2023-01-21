@@ -19,7 +19,8 @@ export const useManageCart = () => {
    const [cartQuantity, setCartQuantity] = useState(1)
    const { storeProduct } = useManageProduct()
 
-   const updateCustomerCart = async (cartQty: number, storeProduct: Product | null, cartProduct?: CartItem | null) => {
+
+   const updateCustomerCart = async (cartQty: number, storeProduct: Product | undefined, cartProduct?: CartItem | null) => {
       if (!cartProduct || cartQty < cartProduct.quantity) {
          // Increase the quantity for an existing product in
          // the cart, and update the count of quantity
