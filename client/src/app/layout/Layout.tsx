@@ -1,20 +1,21 @@
 import { useState, useEffect } from 'react'
+import { ToastContainer } from 'react-toastify'
 import { createTheme, ThemeProvider, CssBaseline } from '@mui/material'
 
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+import { useManageCart } from '../hooks/useManageCart'
 
 import TopBar from '../common/navigation/TopBar/TopBar'
+
 import { getBrowserCookie } from '../utils'
-import agent from '../api/agent'
-import { useCartContext } from '../state/context/cartContext'
+
+import 'react-toastify/dist/ReactToastify.css'
 
 interface Props {
 	children: JSX.Element
 }
 
 function Layout({ children }: Props) {
-	const { setShoppingCart } = useCartContext()
+	const { fetchCustomerCart } = useManageCart()
 
 	const [darkMode, setDarkMode] = useState(false)
 	const paletteToggle = darkMode ? 'dark' : 'light'
@@ -42,9 +43,7 @@ function Layout({ children }: Props) {
 		const customerId = getBrowserCookie('clientId')
 
 		if (customerId) {
-			agent.CartRoutes.getShoppingCart()
-				.then(customerCart => setShoppingCart(customerCart))
-				.catch(error => console.warn(error))
+			fetchCustomerCart()
 		}
 		// eslint-disable-next-line
 	}, [])

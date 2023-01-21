@@ -12,10 +12,7 @@ import {
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 
-import agent from '../../api/agent'
-import { useCatalogContext } from '../../state/context/catalogContext'
-import { useCartContext } from '../../state/context/cartContext'
-
+import { useManageCart } from '../../hooks/useManageCart'
 import { Product } from '../../models/product'
 
 interface Props {
@@ -23,15 +20,7 @@ interface Props {
 }
 
 function ProductCard({ product }: Props) {
-	// const { loadCatalog } = useCatalogContext()
-	const { setShoppingCart } = useCartContext()
-	//
-	function handleAddProduct(productId: number) {
-		//
-		agent.CartRoutes.addToShoppingCart(productId)
-			.then(currentCart => setShoppingCart(currentCart))
-			.catch(error => console.warn(error))
-	}
+	const { cartStatus, addCustomerItem } = useManageCart()
 
 	return (
 		<>
@@ -55,8 +44,8 @@ function ProductCard({ product }: Props) {
 				</CardContent>
 				<CardActions>
 					<LoadingButton
-						loading={false}
-						onClick={() => handleAddProduct(product.id)}
+						loading={cartStatus.includes('pendingAddItem' + product.id)}
+						onClick={() => addCustomerItem(product.id)}
 						size='small'
 						variant='contained'
 						fullWidth={true}

@@ -12,18 +12,18 @@ function CatalogList() {
 		useManageProduct()
 
 	useEffect(() => {
-		fetchCatalogProducts()
+		if (!loadProducts) {
+			fetchCatalogProducts()
+		}
 		// eslint-disable-next-line
-	}, [])
+	}, [loadProducts])
+
+	if (!loadProducts) return <LoadingIndicator message='Loading Catalog...' />
 
 	return (
 		<Layout>
 			<Container>
-				{loadProducts ? (
-					<LoadingIndicator message='Loading Catalog...' />
-				) : (
-					<ProductsList products={storeProducts} />
-				)}
+				<ProductsList products={storeProducts} />
 			</Container>
 		</Layout>
 	)

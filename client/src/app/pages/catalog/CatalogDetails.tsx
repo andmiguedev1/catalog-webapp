@@ -9,7 +9,7 @@ import Layout from '../../layout/Layout'
 import ProductDetails from '../../components/products/ProductDetails'
 
 function CatalogDetails() {
-	const { productId } = useParams()
+	const { productId } = useParams<{ productId: string }>()
 
 	// const { shoppingCart, setCartQuantity, findProductInCart } = useManageCart()
 	const { storeProduct, fetchCatalogProduct } = useManageProduct()
@@ -21,9 +21,12 @@ function CatalogDetails() {
 		//	setCartQuantity(cartProduct.quantity)
 		// }
 
-		fetchCatalogProduct(productId!)
+		if (!storeProduct) {
+			fetchCatalogProduct(productId!)
+		}
+
 		// eslint-disable-next-line
-	}, [productId])
+	}, [productId, storeProduct])
 
 	return (
 		<Layout>

@@ -13,22 +13,19 @@ import {
 } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 
-import { useCartContext } from '../../state/context/cartContext'
-
+import { useManageCart } from '../../hooks/useManageCart'
 import { Product } from '../../models/product'
-// import { CartItem } from '../../models/cart'
 
 import LoadingIndicator from '../../common/loading/LoadingIndicator'
-import { useManageCart } from '../../hooks/useManageCart'
 
 interface Props {
-	product: Product | null
-	// productItem: CartItem | undefined
+	product: Product | undefined
+	// productItem: CartItem | null
 }
 
 function ProductDetails({ product }: Props) {
-	const { updateCart, setUpdateCart } = useCartContext()
-	const { cartQuantity, setCartQuantity, updateCustomerCart } = useManageCart()
+	const { cartQuantity, setCartQuantity, updateCustomerCart, cartStatus } =
+		useManageCart()
 
 	// Change the number of product cart's quantity
 	function handleProductQty(event: ChangeEvent<HTMLInputElement>) {
@@ -41,80 +38,75 @@ function ProductDetails({ product }: Props) {
 
 	function handleUpdateProduct() {
 		try {
-			setUpdateCart(true)
 			updateCustomerCart(cartQuantity, product)
 		} catch (message) {
 			console.error(message)
-		} finally {
-			setUpdateCart(false)
 		}
 	}
 
+	if (!product) return <LoadingIndicator message='Catalog Info...' />
+
 	return (
 		<>
-			{!product ? (
-				<LoadingIndicator message='Catalog Info...' />
-			) : (
-				<Grid container spacing={6}>
-					<Grid item xs={6}>
-						<img src={product.image} alt={product.name} style={{ width: '100%' }} />
-					</Grid>
-					<Grid item xs={6}>
-						<Typography variant='h3'>{product.name}</Typography>
-						<Divider sx={{ marginBottom: 2 }} />
-						<Typography variant='h4' color='secondary'>
-							{product.price.toFixed(2)}
-						</Typography>
-						<TableContainer>
-							<Table>
-								<TableBody>
-									<TableRow>
-										<TableCell>Item Name</TableCell>
-										<TableCell>{product.name}</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell>Item Type</TableCell>
-										<TableCell>{product.brand}</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell>Item Brand</TableCell>
-										<TableCell>{product.brand}</TableCell>
-									</TableRow>
-									<TableRow>
-										<TableCell>Item Stock</TableCell>
-										<TableCell>{product.quantity}</TableCell>
-									</TableRow>
-								</TableBody>
-							</Table>
-						</TableContainer>
-						<Grid container spacing={2}>
-							<Grid item xs={6}>
-								<TextField
-									variant='outlined'
-									type='number'
-									label='Number of items'
-									fullWidth
-									value={cartQuantity}
-									onChange={handleProductQty}
-								/>
-							</Grid>
-							<Grid item xs={6}>
-								<LoadingButton
-									loading={updateCart}
-									sx={{ height: '55px' }}
-									color='primary'
-									size='large'
-									variant='contained'
-									fullWidth
-									onClick={handleUpdateProduct}
-								>
-									Add to Cart
-								</LoadingButton>
-							</Grid>
+			<Grid container spacing={6}>
+				<Grid item xs={6}>
+					<img src={product.image} alt={product.name} style={{ width: '100%' }} />
+				</Grid>
+				<Grid item xs={6}>
+					<Typography variant='h3'>{product.name}</Typography>
+					<Divider sx={{ marginBottom: 2 }} />
+					<Typography variant='h4' color='secondary'>
+						{product.price.toFixed(2)}
+					</Typography>
+					<TableContainer>
+						<Table>
+							<TableBody>
+								<TableRow>
+									<TableCell>Item Name</TableCell>
+									<TableCell>{product.name}</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell>Item Type</TableCell>
+									<TableCell>{product.brand}</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell>Item Brand</TableCell>
+									<TableCell>{product.brand}</TableCell>
+								</TableRow>
+								<TableRow>
+									<TableCell>Item Stock</TableCell>
+									<TableCell>{product.quantity}</TableCell>
+								</TableRow>
+							</TableBody>
+						</Table>
+					</TableContainer>
+					<Grid container spacing={2}>
+						<Grid item xs={6}>
+							<TextField
+								variant='outlined'
+								type='number'
+								label='Number of items'
+								fullWidth
+								value={cartQuantity}
+								onChange={handleProductQty}
+							/>
+						</Grid>
+						<Grid item xs={6}>
+							<LoadingButton
+								loading={cartStatus.includes('pending')}
+								sx={{ height: '55px' }}
+								color='primary'
+								size='large'
+								variant='contained'
+								fullWidth
+								onClick={handleUpdateProduct}
+							>
+								Add to Cart
+							</LoadingButton>
 						</Grid>
 					</Grid>
 				</Grid>
-			)}
+			</Grid>
 		</>
 	)
 }

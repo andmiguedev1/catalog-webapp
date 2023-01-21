@@ -1,30 +1,37 @@
-import { useManageProduct } from './useManageProduct';
+import { addCartItemAsync, removeCartItemAsync } from './../store/reducers/cartSlice';
 import { useState } from 'react' 
-import agent from '../api/agent';
-import { Cart, CartItem } from '../models/cart';
 
-import { useCartContext } from '../state/context/cartContext';
+import agent from '../api/agent';
+import { useAppDispatch } from './../store/appStore';
+import { useAppSelector } from '../store/appStore';
+import { setCartItem } from '../store/reducers/cartSlice';
+
+import { useManageProduct } from './useManageProduct';
+
+import { Cart, CartItem } from '../models/cart';
 import { Product } from '../models/product';
 
+
 export const useManageCart = () => {
+   const dispatch = useAppDispatch()
+   const { cart: shoppingCart, status: cartStatus } = useAppSelector(state => state.cart)
+
    const [cartQuantity, setCartQuantity] = useState(1)
    const { storeProduct } = useManageProduct()
-   const { shoppingCart, setShoppingCart, removeCartItem } = useCartContext()
 
-   const updateCustomerCart = async (cartQty: number, storeProduct: Product | null, cartProduct?: CartItem) => {
+
+   const updateCustomerCart = async (cartQty: number, storeProduct: Product | undefined, cartProduct?: CartItem | null) => {
       if (!cartProduct || cartQty < cartProduct.quantity) {
          // Increase the quantity for an existing product in
          // the cart, and update the count of quantity
          const updateQuantity = cartProduct ? cartQty - cartProduct.quantity : cartQty
-         const updateItem = await agent.CartRoutes.addToShoppingCart(storeProduct?.id!, updateQuantity)
-         return await setShoppingCart(updateItem)
+         return await dispatch(addCartItemAsync({productId: storeProduct?.id!, quantity: updateQuantity}))
       }
       else {
          // Decrease the quantity of an existing product in 
          // the cart, and update the count of quantity
-         // const updateQuantity = cartProduct.quantity - cartQty
-         // await agent.CartRoutes.removeFromShoppingCart(storeProduct?.id!, updateQuantity)
-         // return await removeCartItem(storeProduct?.id!, updateQuantity)
+         const updateQuantity = cartProduct.quantity - cartQty
+         return await dispatch(removeCartItemAsync({productId: storeProduct?.id!, quantity: updateQuantity}))
       }
    }
 
@@ -37,7 +44,7 @@ export const useManageCart = () => {
    const fetchCustomerCart = async () => {
       try {
          const cartProducts = await agent.CartRoutes.getShoppingCart()
-         return await setShoppingCart(cartProducts)
+         return await dispatch(setCartItem(cartProducts))
       } catch (message) {
          console.error(message)
       } 
@@ -45,8 +52,7 @@ export const useManageCart = () => {
 
    const addCustomerItem = async (productId: number) => {
       try {
-         const addedProduct = await agent.CartRoutes.addToShoppingCart(productId)
-         return await setShoppingCart(addedProduct)
+         return await dispatch(addCartItemAsync({productId}))
       } catch (message) {
          console.error(message)
       }  
@@ -54,8 +60,7 @@ export const useManageCart = () => {
 
    const removeCustomerItem = async (productId: number, quantity: number) => {
       try {
-         await agent.CartRoutes.removeFromShoppingCart(productId, quantity)
-         return await removeCartItem(productId, quantity)
+         return await dispatch(removeCartItemAsync({productId, quantity}))
       } catch (message) {
          console.error(message)
       }
@@ -69,6 +74,7 @@ export const useManageCart = () => {
       addCustomerItem,
       removeCustomerItem,
       findProductInCart,
+      cartStatus,
       updateCustomerCart
    }
 }
