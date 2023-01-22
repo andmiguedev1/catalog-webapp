@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { Container } from '@mui/material'
 
 import { useManageProduct } from '../../hooks/useManageProduct'
-// import { useManageCart } from '../../hooks/useManageCart'
+import { useManageCart } from '../../hooks/useManageCart'
 
 import Layout from '../../layout/Layout'
 import ProductDetails from '../../components/products/ProductDetails'
@@ -11,27 +11,25 @@ import ProductDetails from '../../components/products/ProductDetails'
 function CatalogDetails() {
 	const { productId } = useParams<{ productId: string }>()
 
-	// const { shoppingCart, setCartQuantity, findProductInCart } = useManageCart()
 	const { storeProduct, fetchCatalogProduct } = useManageProduct()
+	const { shoppingCart, setCartQuantity, findProductInCart } = useManageCart()
 
-	// const cartProduct = findProductInCart(shoppingCart)
+	const cartProduct = findProductInCart(shoppingCart)
 
 	useEffect(() => {
-		//if (cartProduct !== undefined) {
-		//	setCartQuantity(cartProduct.quantity)
-		// }
-
 		if (!storeProduct) {
 			fetchCatalogProduct(productId!)
+		} else if (cartProduct !== undefined) {
+			setCartQuantity(cartProduct.quantity)
 		}
 
 		// eslint-disable-next-line
-	}, [productId, storeProduct])
+	}, [productId])
 
 	return (
 		<Layout>
 			<Container>
-				<ProductDetails product={storeProduct} />
+				<ProductDetails productItem={storeProduct} cartItem={cartProduct} />
 			</Container>
 		</Layout>
 	)

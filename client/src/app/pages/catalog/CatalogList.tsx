@@ -16,9 +16,9 @@ function CatalogList() {
 			fetchCatalogProducts()
 		}
 		// eslint-disable-next-line
-	}, [loadProducts])
+	}, [])
 
-	if (!loadProducts) return <LoadingIndicator message='Loading Catalog...' />
+	if (loadProducts) return <LoadingIndicator message='Loading Catalog...' />
 
 	return (
 		<Layout>

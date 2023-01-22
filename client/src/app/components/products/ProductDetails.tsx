@@ -15,17 +15,17 @@ import { LoadingButton } from '@mui/lab'
 
 import { useManageCart } from '../../hooks/useManageCart'
 import { Product } from '../../models/product'
+import { CartItem } from '../../models/cart'
 
 import LoadingIndicator from '../../common/loading/LoadingIndicator'
 
 interface Props {
-	product: Product | undefined
-	// productItem: CartItem | null
+	productItem: Product | null
+	cartItem: CartItem | undefined
 }
 
-function ProductDetails({ product }: Props) {
-	const { cartQuantity, setCartQuantity, updateCustomerCart, cartStatus } =
-		useManageCart()
+function ProductDetails({ productItem, cartItem }: Props) {
+	const { cartQuantity, setCartQuantity, updateCustomerCart } = useManageCart()
 
 	// Change the number of product cart's quantity
 	function handleProductQty(event: ChangeEvent<HTMLInputElement>) {
@@ -38,44 +38,48 @@ function ProductDetails({ product }: Props) {
 
 	function handleUpdateProduct() {
 		try {
-			updateCustomerCart(cartQuantity, product)
+			updateCustomerCart(cartItem, cartQuantity, productItem)
 		} catch (message) {
 			console.error(message)
 		}
 	}
 
-	if (!product) return <LoadingIndicator message='Catalog Info...' />
+	if (!productItem) return <LoadingIndicator message='Catalog Info...' />
 
 	return (
 		<>
 			<Grid container spacing={6}>
 				<Grid item xs={6}>
-					<img src={product.image} alt={product.name} style={{ width: '100%' }} />
+					<img
+						src={productItem.image}
+						alt={productItem.name}
+						style={{ width: '100%' }}
+					/>
 				</Grid>
 				<Grid item xs={6}>
-					<Typography variant='h3'>{product.name}</Typography>
+					<Typography variant='h3'>{productItem.name}</Typography>
 					<Divider sx={{ marginBottom: 2 }} />
 					<Typography variant='h4' color='secondary'>
-						{product.price.toFixed(2)}
+						{productItem.price.toFixed(2)}
 					</Typography>
 					<TableContainer>
 						<Table>
 							<TableBody>
 								<TableRow>
 									<TableCell>Item Name</TableCell>
-									<TableCell>{product.name}</TableCell>
+									<TableCell>{productItem.name}</TableCell>
 								</TableRow>
 								<TableRow>
 									<TableCell>Item Type</TableCell>
-									<TableCell>{product.brand}</TableCell>
+									<TableCell>{productItem.brand}</TableCell>
 								</TableRow>
 								<TableRow>
 									<TableCell>Item Brand</TableCell>
-									<TableCell>{product.brand}</TableCell>
+									<TableCell>{productItem.brand}</TableCell>
 								</TableRow>
 								<TableRow>
 									<TableCell>Item Stock</TableCell>
-									<TableCell>{product.quantity}</TableCell>
+									<TableCell>{productItem.quantity}</TableCell>
 								</TableRow>
 							</TableBody>
 						</Table>
@@ -93,7 +97,7 @@ function ProductDetails({ product }: Props) {
 						</Grid>
 						<Grid item xs={6}>
 							<LoadingButton
-								loading={cartStatus.includes('pending')}
+								loading={false}
 								sx={{ height: '55px' }}
 								color='primary'
 								size='large'
