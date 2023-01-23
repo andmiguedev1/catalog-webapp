@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using api.Entities;
+using api.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,10 +20,14 @@ namespace api.Controllers
 
       [HttpGet]
       // api/products
-      public async Task<ActionResult<List<Product>>> GetProducts()
+      public async Task<ActionResult<List<Product>>> GetProducts(string orderBy)
       {
+         // Transform a list of products into a query list 
+         // and call extension method
+         var productsQuery = _context.Products.SortProducts(orderBy).AsQueryable();
+
          // Return all products asynchronously
-         return await _context.Products.ToListAsync();
+         return await productsQuery.ToListAsync();
       }
 
       [HttpGet("{id}")]
