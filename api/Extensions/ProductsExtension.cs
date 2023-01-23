@@ -21,5 +21,19 @@ namespace api.Extensions
 
          return query;
       }
+
+      public static IQueryable<Product> SearchProducts(this IQueryable<Product> query, string keyword)
+      {
+         // Do not search if there is a blank
+         // parameter
+         if (string.IsNullOrEmpty(keyword))
+            return query;
+
+         // Make customer's search keyword readable
+         var searchTerm = keyword.Trim().ToLower();
+
+         // Compare result by searching product's name with search keyword
+         return query.Where(product => product.Name.ToLower().Contains(searchTerm));
+      }
    }
 }

@@ -20,11 +20,10 @@ namespace api.Controllers
 
       [HttpGet]
       // api/products
-      public async Task<ActionResult<List<Product>>> GetProducts(string orderBy)
+      public async Task<ActionResult<List<Product>>> GetProducts(string orderBy, string keyword)
       {
-         // Transform a list of products into a query list 
-         // and call extension method
-         var productsQuery = _context.Products.SortProducts(orderBy).AsQueryable();
+         // Perform sorting and searching of products 
+         var productsQuery = _context.Products.SortProducts(orderBy).SearchProducts(keyword).AsQueryable();
 
          // Return all products asynchronously
          return await productsQuery.ToListAsync();
