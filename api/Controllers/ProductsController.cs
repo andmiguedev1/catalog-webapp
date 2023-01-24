@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using api.Data;
 using api.Entities;
 using api.Extensions;
+using api.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,13 +22,20 @@ namespace api.Controllers
 
       [HttpGet]
       // api/products
-      public async Task<ActionResult<List<Product>>> GetProducts(string orderBy, string searchBy, string brands, string types)
+      public async Task<ActionResult<PagesList<Product>>> GetProducts([FromQuery] ProductsParams storeParams)
       {
-         // Perform sorting and searching of products 
-         var productsQuery = _context.Products.SortProducts(orderBy).SearchProducts(searchBy).FilterByCategories(brands, types).AsQueryable();
+         // Find products using several categories 
+         var productsQuery = _context.Products
+            .SortProducts(storeParams.OrderBy)
+            .SearchProducts(storeParams.SearchWord)
+            .FilterByCategories(storeParams.Brands, storeParams.Types).AsQueryable();
 
-         // Return all products asynchronously
-         return await productsQuery.ToListAsync();
+         // Divide products using pagination parameters
+         var productsList = await PagesList<Product>.PaginatePages(productsQuery, storeParams.PageNumber, storeParams.PageSize);
+         // Display a list of products for each page
+         Response.Headers.Add("Pagination", JsonSerializer.Serialize(productsList.Pages));
+
+         return productsList;
       }
 
       [HttpGet("{id}")]
