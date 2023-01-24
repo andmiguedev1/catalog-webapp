@@ -38,6 +38,17 @@ namespace api.Controllers
          return productsList;
       }
 
+      [HttpGet("filter")]
+      // api/products/filter
+      public async Task<IActionResult> GetSelectionList()
+      {
+         // Select all the different products' types and brands 
+         var productBrands = await _context.Products.Select(product => product.Brand).Distinct().ToListAsync();
+         var productTypes = await _context.Products.Select(product => product.Type).Distinct().ToListAsync();
+
+         return Ok(new { productBrands, productTypes });
+      }
+
       [HttpGet("{id}")]
       // api/products/1
       public async Task<ActionResult<Product>> GetProduct(int id)
