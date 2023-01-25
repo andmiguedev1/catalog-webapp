@@ -1,10 +1,11 @@
 import { useEffect } from 'react'
-import { Container } from '@mui/material'
+import { Container, Grid, Box, Typography, Pagination } from '@mui/material'
 
 import { useManageProduct } from '../../hooks/useManageProduct'
 
 import Layout from '../../layout/Layout'
 import LoadingIndicator from '../../common/loading/LoadingIndicator'
+import ProductsFilter from '../../components/products/ProductsFilter'
 import ProductsList from '../../components/products/ProductsList'
 
 function CatalogList() {
@@ -35,7 +36,21 @@ function CatalogList() {
 	return (
 		<Layout>
 			<Container>
-				<ProductsList products={storeProducts} />
+				<Grid container columnSpacing={4}>
+					<Grid item xs={3}>
+						<ProductsFilter />
+					</Grid>
+					<Grid item xs={9}>
+						<ProductsList products={storeProducts} />
+					</Grid>
+					<Grid item xs={3} />
+					<Grid item xs={9}>
+						<Box display='flex' justifyContent='center' alignItems='center'>
+							<Typography>Displaying 1-6 (20 items)</Typography>
+							<Pagination color='secondary' size='large' count={10} page={2} />
+						</Box>
+					</Grid>
+				</Grid>
 			</Container>
 		</Layout>
 	)

@@ -48,7 +48,7 @@ function ProductDetails({ productItem, cartItem }: Props) {
 
 	return (
 		<>
-			<Grid container spacing={6}>
+			<Grid container spacing={4}>
 				<Grid item xs={6}>
 					<img
 						src={productItem.image}
