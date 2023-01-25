@@ -1,28 +1,29 @@
-import { useState } from 'react'
+import { getProductFilters } from './../store/reducers/productsSlice';
 import agent from '../api/agent';
+
 import { useAppDispatch, useAppSelector } from '../store/appStore';
-import { setProductItem, setProductItems } from '../store/reducers/productsSlice';
-// import { fetchProductAsync, fetchProductsAsync, productSelectors } from '../store/reducers/productsSlice';
+import { productSelectors, fetchProductsAsync } from '../store/reducers/productsSlice';
+import { setProductItem } from '../store/reducers/productsSlice';
 
 export const useManageProduct = () => {
-   // const productId: number = 1
    const dispatch = useAppDispatch()
 
-   //const { loadProducts, status: productStatus } = useAppSelector(state => state.products)
-   //const storeProducts = useAppSelector(productSelectors.selectAll)
-   //const storeProduct = useAppSelector(state => productSelectors.selectById(state, productId))
-   const { product: storeProduct, products: storeProducts } = useAppSelector(state => state.products)
-   const [loadProducts, setLoadProducts ] = useState(false)
+   const { loadProducts, product: storeProduct, loadFilters } = useAppSelector(state => state.products)   
+   const storeProducts = useAppSelector(productSelectors.selectAll)
+
+   const fetchProductCategories = async () => {
+      try {
+         return await dispatch(getProductFilters())
+      } catch (message) {
+         console.warn(message)
+      }
+   }
 
    const fetchCatalogProducts = async () => {
       try {
-         setLoadProducts(true)
-         const recentProducts = await agent.CatalogRoutes.getRecentProducts()
-         return await dispatch(setProductItems(recentProducts))
+         return await dispatch(fetchProductsAsync())
       } catch (message) {
          console.error(message)
-      } finally {
-         setLoadProducts(false)
       }
    }
 
@@ -39,7 +40,9 @@ export const useManageProduct = () => {
       loadProducts,
       storeProduct,
       storeProducts,
+      loadFilters,
       fetchCatalogProduct,
-      fetchCatalogProducts
+      fetchCatalogProducts,
+      fetchProductCategories
    }
 }

@@ -8,7 +8,8 @@ export const CartRoutes = {
 
 export const CatalogRoutes = {
    getRecentProducts: () => requestType.get('products'),
-   getSingleProduct: (productId: number) => requestType.get(`products/${productId}`)
+   getSingleProduct: (productId: number) => requestType.get(`products/${productId}`),
+   getProductCategories: () => requestType.get('products/filterBy')
 }
 
 export const ErrorRoutes = {

@@ -8,17 +8,29 @@ import LoadingIndicator from '../../common/loading/LoadingIndicator'
 import ProductsList from '../../components/products/ProductsList'
 
 function CatalogList() {
-	const { loadProducts, storeProducts, fetchCatalogProducts } =
-		useManageProduct()
+	const {
+		loadProducts,
+		storeProducts,
+		fetchCatalogProducts,
+		loadFilters,
+		fetchProductCategories,
+	} = useManageProduct()
 
 	useEffect(() => {
 		if (!loadProducts) {
 			fetchCatalogProducts()
 		}
 		// eslint-disable-next-line
-	}, [])
+	}, [loadProducts])
 
-	if (loadProducts) return <LoadingIndicator message='Loading Catalog...' />
+	useEffect(() => {
+		if (!loadFilters) {
+			fetchProductCategories()
+		}
+		// eslint-disable-next-line
+	}, [loadFilters])
+
+	if (!loadProducts) return <LoadingIndicator message='Loading Catalog...' />
 
 	return (
 		<Layout>
