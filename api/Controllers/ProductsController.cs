@@ -38,7 +38,7 @@ namespace api.Controllers
          return productsList;
       }
 
-      [HttpGet("filter")]
+      [HttpGet("filterBy")]
       // api/products/filter
       public async Task<IActionResult> GetSelectionList()
       {

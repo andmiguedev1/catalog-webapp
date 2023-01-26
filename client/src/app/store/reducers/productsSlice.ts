@@ -63,7 +63,6 @@ export const productsSlice = createSlice({
          state.loadProducts = true
       })
       builder.addCase(fetchProductsAsync.rejected, (state, action) => {
-         console.log(action.payload)
          state.status = 'idle'
       })
       builder.addCase(getProductFilters.pending, (state) => {

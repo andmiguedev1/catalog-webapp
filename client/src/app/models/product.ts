@@ -11,3 +11,8 @@ export interface Product {
 export interface StoreProducts {
    products: Product[]
 }
+
+export interface ProductFilters {
+   productBrands: [],
+   productTypes: []
+}

@@ -1,4 +1,3 @@
-import { getProductFilters } from './../store/reducers/productsSlice';
 import agent from '../api/agent';
 
 import { useAppDispatch, useAppSelector } from '../store/appStore';
@@ -8,16 +7,8 @@ import { setProductItem } from '../store/reducers/productsSlice';
 export const useManageProduct = () => {
    const dispatch = useAppDispatch()
 
-   const { loadProducts, product: storeProduct, loadFilters } = useAppSelector(state => state.products)   
+   const { loadProducts, product: storeProduct } = useAppSelector(state => state.products)   
    const storeProducts = useAppSelector(productSelectors.selectAll)
-
-   const fetchProductCategories = async () => {
-      try {
-         return await dispatch(getProductFilters())
-      } catch (message) {
-         console.warn(message)
-      }
-   }
 
    const fetchCatalogProducts = async () => {
       try {
@@ -40,9 +31,7 @@ export const useManageProduct = () => {
       loadProducts,
       storeProduct,
       storeProducts,
-      loadFilters,
       fetchCatalogProduct,
       fetchCatalogProducts,
-      fetchProductCategories
    }
 }

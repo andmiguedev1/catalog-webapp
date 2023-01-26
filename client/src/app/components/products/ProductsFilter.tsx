@@ -10,14 +10,14 @@ import {
 } from '@mui/material'
 import { CheckBox } from '@mui/icons-material'
 
-import { useAppSelector } from '../../store/appStore'
 import { sortOptions } from '../../constants'
+import { ProductFilters } from '../../models/product'
 
-function ProductsFilter() {
-	const { brands: productBrands, types: productTypes } = useAppSelector(
-		state => state.products,
-	)
+interface Props {
+	filterBy: ProductFilters | undefined
+}
 
+function ProductsFilter({ filterBy }: Props) {
 	return (
 		<>
 			<Paper sx={{ marginBottom: 2 }}>
@@ -40,14 +40,14 @@ function ProductsFilter() {
 			</Paper>
 			<Paper sx={{ marginBottom: 2, padding: 2 }}>
 				<FormGroup>
-					{productBrands.map(brand => (
+					{filterBy?.productBrands.map(brand => (
 						<FormControlLabel control={<CheckBox />} label={brand} key={brand} />
 					))}
 				</FormGroup>
 			</Paper>
 			<Paper sx={{ marginBottom: 2, padding: 2 }}>
 				<FormGroup>
-					{productTypes.map(type => (
+					{filterBy?.productTypes.map(type => (
 						<FormControlLabel control={<CheckBox />} label={type} key={type} />
 					))}
 				</FormGroup>

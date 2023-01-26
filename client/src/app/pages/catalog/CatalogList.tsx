@@ -1,6 +1,8 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Container, Grid, Box, Typography, Pagination } from '@mui/material'
 
+import { useAppDispatch, useAppSelector } from '../../store/appStore'
+import { getProductFilters } from '../../store/reducers/productsSlice'
 import { useManageProduct } from '../../hooks/useManageProduct'
 
 import Layout from '../../layout/Layout'
@@ -9,36 +11,46 @@ import ProductsFilter from '../../components/products/ProductsFilter'
 import ProductsList from '../../components/products/ProductsList'
 
 function CatalogList() {
-	const {
-		loadProducts,
-		storeProducts,
-		fetchCatalogProducts,
-		loadFilters,
-		fetchProductCategories,
-	} = useManageProduct()
+	const [categories, setCategories] = useState()
+
+	const dispatch = useAppDispatch()
+	const { loadFilters, status: loadingStatus } = useAppSelector(
+		state => state.products,
+	)
+
+	const { loadProducts, storeProducts, fetchCatalogProducts } =
+		useManageProduct()
+
+	async function fetchCatalogCategories() {
+		if (!loadFilters) {
+			await dispatch(getProductFilters())
+				.then(response => response.payload)
+				.then(productFilters => setCategories(productFilters))
+		}
+	}
 
 	useEffect(() => {
 		if (!loadProducts) {
 			fetchCatalogProducts()
 		}
+
 		// eslint-disable-next-line
 	}, [loadProducts])
 
 	useEffect(() => {
-		if (!loadFilters) {
-			fetchProductCategories()
-		}
+		fetchCatalogCategories()
 		// eslint-disable-next-line
-	}, [loadFilters])
+	}, [])
 
-	if (!loadProducts) return <LoadingIndicator message='Loading Catalog...' />
+	if (loadingStatus.includes('pending'))
+		return <LoadingIndicator message='Loading Catalog...' />
 
 	return (
 		<Layout>
 			<Container>
 				<Grid container columnSpacing={4}>
 					<Grid item xs={3}>
-						<ProductsFilter />
+						<ProductsFilter filterBy={categories} />
 					</Grid>
 					<Grid item xs={9}>
 						<ProductsList products={storeProducts} />
