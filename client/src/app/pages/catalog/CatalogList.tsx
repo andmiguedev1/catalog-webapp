@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Container, Grid, Box, Typography, Pagination } from '@mui/material'
 
 import { useAppDispatch, useAppSelector } from '../../store/appStore'
-import { getProductFilters } from '../../store/reducers/productsSlice'
+import { fetchCategoriesAsync } from '../../store/reducers/catalogSlice'
 import { useManageProduct } from '../../hooks/useManageProduct'
 
 import Layout from '../../layout/Layout'
@@ -15,7 +15,7 @@ function CatalogList() {
 
 	const dispatch = useAppDispatch()
 	const { loadFilters, status: loadingStatus } = useAppSelector(
-		state => state.products,
+		state => state.catalog,
 	)
 
 	const { loadProducts, storeProducts, fetchCatalogProducts } =
@@ -23,7 +23,7 @@ function CatalogList() {
 
 	async function fetchCatalogCategories() {
 		if (!loadFilters) {
-			await dispatch(getProductFilters())
+			await dispatch(fetchCategoriesAsync())
 				.then(response => response.payload)
 				.then(productFilters => setCategories(productFilters))
 		}

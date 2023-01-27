@@ -7,7 +7,7 @@ export const CartRoutes = {
 }
 
 export const CatalogRoutes = {
-   getRecentProducts: () => requestType.get('products'),
+   getRecentProducts: (params: URLSearchParams) => requestType.get('products', params),
    getSingleProduct: (productId: number) => requestType.get(`products/${productId}`),
    getProductCategories: () => requestType.get('products/filterBy')
 }

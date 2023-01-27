@@ -16,3 +16,12 @@ export interface ProductFilters {
    productBrands: [],
    productTypes: []
 }
+
+export interface ProductParams {
+   pageNumber: number
+   pageSize: number
+   orderBy: string
+   searchWord?: string
+   productBrands?: string[]
+   productTypes?: string[]
+}
