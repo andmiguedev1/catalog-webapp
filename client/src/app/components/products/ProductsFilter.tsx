@@ -1,42 +1,31 @@
-import {
-	FormControl,
-	FormControlLabel,
-	FormGroup,
-	FormLabel,
-	Paper,
-	Radio,
-	RadioGroup,
-	TextField,
-} from '@mui/material'
+import { FormControlLabel, FormGroup, Paper } from '@mui/material'
 import { CheckBox } from '@mui/icons-material'
 
 import { sortOptions } from '../../constants'
 import { ProductFilters } from '../../models/product'
+
+import SearchBox from '../../common/search/SearchBox'
+import CheckboxList from '../../common/checkbox/CheckboxList'
+import { useManageProduct } from '../../hooks/useManageProduct'
 
 interface Props {
 	filterBy: ProductFilters | undefined
 }
 
 function ProductsFilter({ filterBy }: Props) {
+	const { productsMetadata, filterCatalogProducts } = useManageProduct()
+
 	return (
 		<>
 			<Paper sx={{ marginBottom: 2 }}>
-				<TextField label='Search products' variant='outlined' fullWidth />
+				<SearchBox />
 			</Paper>
 			<Paper sx={{ marginBottom: 2, padding: 2 }}>
-				<FormControl component='fieldset'>
-					<FormLabel component='legend'>T</FormLabel>
-					<RadioGroup aria-label='' defaultValue='' name=''>
-						{sortOptions.map(({ value, label }) => (
-							<FormControlLabel
-								value={value}
-								control={<Radio />}
-								label={label}
-								key={value}
-							/>
-						))}
-					</RadioGroup>
-				</FormControl>
+				<CheckboxList
+					selectValue={productsMetadata.orderBy}
+					optionsList={sortOptions}
+					onChange={e => filterCatalogProducts(e)}
+				/>
 			</Paper>
 			<Paper sx={{ marginBottom: 2, padding: 2 }}>
 				<FormGroup>
