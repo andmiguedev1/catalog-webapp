@@ -6,7 +6,6 @@ import { fetchCategoriesAsync } from '../../store/reducers/catalogSlice'
 import { useManageProduct } from '../../hooks/useManageProduct'
 
 import Layout from '../../layout/Layout'
-import LoadingIndicator from '../../common/loading/LoadingIndicator'
 import ProductsFilter from '../../components/products/ProductsFilter'
 import ProductsList from '../../components/products/ProductsList'
 
@@ -14,9 +13,7 @@ function CatalogList() {
 	const [categories, setCategories] = useState()
 
 	const dispatch = useAppDispatch()
-	const { loadFilters, status: loadingStatus } = useAppSelector(
-		state => state.catalog,
-	)
+	const { loadFilters } = useAppSelector(state => state.catalog)
 
 	const { loadProducts, storeProducts, fetchCatalogProducts } =
 		useManageProduct()
@@ -42,8 +39,8 @@ function CatalogList() {
 		// eslint-disable-next-line
 	}, [])
 
-	if (loadingStatus.includes('pending'))
-		return <LoadingIndicator message='Loading Catalog...' />
+	// if (loadingStatus.includes('pending'))
+	//	return <LoadingIndicator message='Loading Catalog...' />
 
 	return (
 		<Layout>

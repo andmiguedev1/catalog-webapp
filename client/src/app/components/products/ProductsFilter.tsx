@@ -1,19 +1,25 @@
-import { FormControlLabel, FormGroup, Paper } from '@mui/material'
-import { CheckBox } from '@mui/icons-material'
+import { Paper } from '@mui/material'
 
 import { sortOptions } from '../../constants'
 import { ProductFilters } from '../../models/product'
 
-import SearchBox from '../../common/search/SearchBox'
-import CheckboxList from '../../common/checkbox/CheckboxList'
+import { useAppSelector } from '../../store/appStore'
 import { useManageProduct } from '../../hooks/useManageProduct'
+
+import SearchBox from '../../common/search/SearchBox'
+import SelectionList from '../../common/selection/SelectionList'
+import CheckboxList from '../../common/checkbox/CheckboxList'
 
 interface Props {
 	filterBy: ProductFilters | undefined
 }
 
 function ProductsFilter({ filterBy }: Props) {
-	const { productsMetadata, filterCatalogProducts } = useManageProduct()
+	const { metadata } = useAppSelector(state => state.catalog)
+	const { filterCatalogProducts, chooseCatalogCategories } = useManageProduct()
+
+	const productBrands = metadata.productBrands
+	const productTypes = metadata.productTypes
 
 	return (
 		<>
@@ -21,25 +27,27 @@ function ProductsFilter({ filterBy }: Props) {
 				<SearchBox />
 			</Paper>
 			<Paper sx={{ marginBottom: 2, padding: 2 }}>
-				<CheckboxList
-					selectValue={productsMetadata.orderBy}
+				<SelectionList
+					selectValue={metadata.orderBy}
 					optionsList={sortOptions}
 					onChange={e => filterCatalogProducts(e)}
 				/>
 			</Paper>
 			<Paper sx={{ marginBottom: 2, padding: 2 }}>
-				<FormGroup>
-					{filterBy?.productBrands.map(brand => (
-						<FormControlLabel control={<CheckBox />} label={brand} key={brand} />
-					))}
-				</FormGroup>
+				<CheckboxList
+					items={filterBy?.productBrands}
+					checked={productBrands}
+					onChange={productBrands =>
+						chooseCatalogCategories('brands', productBrands)
+					}
+				/>
 			</Paper>
 			<Paper sx={{ marginBottom: 2, padding: 2 }}>
-				<FormGroup>
-					{filterBy?.productTypes.map(type => (
-						<FormControlLabel control={<CheckBox />} label={type} key={type} />
-					))}
-				</FormGroup>
+				<CheckboxList
+					items={filterBy?.productTypes}
+					checked={productTypes}
+					onChange={productTypes => chooseCatalogCategories('types', productTypes)}
+				/>
 			</Paper>
 		</>
 	)

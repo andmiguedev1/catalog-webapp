@@ -7,8 +7,21 @@ import { setProductItem } from '../store/reducers/catalogSlice';
 export const useManageProduct = () => {
    const dispatch = useAppDispatch()
 
-   const { loadProducts, product: storeProduct, metadata: productsMetadata } = useAppSelector(state => state.catalog)   
+   const { loadProducts, product: storeProduct } = useAppSelector(state => state.catalog)   
    const storeProducts = useAppSelector(productSelectors.selectAll)
+
+   const chooseCatalogCategories = async (category: string, checkedList: string[]) => {
+      try { 
+         if (category === 'brands') {
+            await dispatch(setProductsMetadata({ productBrands: checkedList }))
+         }
+         if (category === 'types') {
+            await dispatch(setProductsMetadata({ productTypes: checkedList }))
+         }
+      } catch (message) {
+         console.warn(message)
+      }
+   }
 
    const filterCatalogProducts = async (event: React.ChangeEvent<HTMLInputElement>) => {
       try {
@@ -39,9 +52,9 @@ export const useManageProduct = () => {
       loadProducts,
       storeProduct,
       storeProducts,
-      productsMetadata,
       fetchCatalogProduct,
       fetchCatalogProducts,
-      filterCatalogProducts
+      filterCatalogProducts,
+      chooseCatalogCategories
    }
 }

@@ -1,34 +1,49 @@
-import {
-	FormControl,
-	FormControlLabel,
-	FormLabel,
-	RadioGroup,
-	Radio,
-} from '@mui/material'
-import React from 'react'
+import { Checkbox, FormControlLabel, FormGroup } from '@mui/material'
+import { useState } from 'react'
 
 interface Props {
-   optionsList: Array<{ value: string, label: string }>
-   selectValue: string
-   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+	items: string[] | undefined
+	checked: string[] | undefined
+	onChange: (items: string[]) => void
 }
 
-function CheckboxList({ optionsList, selectValue, onChange} : Props) {
+function CheckboxList({ items, checked, onChange }: Props) {
+	const [checkedItems, setCheckedItems] = useState(checked || [])
+
+	function checkMultipleBoxes(checkedItem: string) {
+		let newCheckedItems: string[] = []
+		// Find current checked items
+		const currentItems = checkedItems.findIndex(item => item === checkedItem)
+		if (currentItems === -1) {
+			// If item is not already checked, then add it
+			// to the array of checked items
+			newCheckedItems = [...checkedItems, checkedItem]
+		} else {
+			// Populate array of checked items
+			newCheckedItems = checkedItems.filter(item => item !== checkedItem)
+		}
+
+		// Create a new array with checked items
+		// and pass it to the redux store
+		setCheckedItems(newCheckedItems)
+		onChange(newCheckedItems)
+	}
+
 	return (
-		<FormControl component='fieldset'>
-			<FormLabel component='legend'>Categories</FormLabel>
-         <RadioGroup
-            onChange={onChange} value={selectValue}>
-				{optionsList.map(({ value, label }) => (
-					<FormControlLabel
-						value={value}
-						control={<Radio />}
-						label={label}
-						key={value}
-					/>
-				))}
-			</RadioGroup>
-		</FormControl>
+		<FormGroup>
+			{items?.map(item => (
+				<FormControlLabel
+					control={
+						<Checkbox
+							checked={checkedItems.indexOf(item) !== -1}
+							onClick={() => checkMultipleBoxes(item)}
+						/>
+					}
+					label={item}
+					key={item}
+				/>
+			))}
+		</FormGroup>
 	)
 }
 
