@@ -15,11 +15,11 @@ interface Props {
 }
 
 function ProductsFilter({ filterBy }: Props) {
-	const { metadata } = useAppSelector(state => state.catalog)
+	const { params } = useAppSelector(state => state.catalog)
 	const { filterCatalogProducts, chooseCatalogCategories } = useManageProduct()
 
-	const productBrands = metadata.productBrands
-	const productTypes = metadata.productTypes
+	const productBrands = params.productBrands
+	const productTypes = params.productTypes
 
 	return (
 		<>
@@ -28,7 +28,7 @@ function ProductsFilter({ filterBy }: Props) {
 			</Paper>
 			<Paper sx={{ marginBottom: 2, padding: 2 }}>
 				<SelectionList
-					selectValue={metadata.orderBy}
+					selectValue={params.orderBy}
 					optionsList={sortOptions}
 					onChange={e => filterCatalogProducts(e)}
 				/>

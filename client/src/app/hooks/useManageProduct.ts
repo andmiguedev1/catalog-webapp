@@ -1,8 +1,7 @@
 import agent from '../api/agent';
 
 import { useAppDispatch, useAppSelector } from '../store/appStore';
-import { productSelectors, fetchProductsAsync, setProductsMetadata } from '../store/reducers/catalogSlice';
-import { setProductItem } from '../store/reducers/catalogSlice';
+import { setProductItem, productSelectors, fetchProductsAsync, setProductsParams } from '../store/reducers/catalogSlice';
 
 export const useManageProduct = () => {
    const dispatch = useAppDispatch()
@@ -13,10 +12,10 @@ export const useManageProduct = () => {
    const chooseCatalogCategories = async (category: string, checkedList: string[]) => {
       try { 
          if (category === 'brands') {
-            await dispatch(setProductsMetadata({ productBrands: checkedList }))
+            await dispatch(setProductsParams({ productBrands: checkedList }))
          }
          if (category === 'types') {
-            await dispatch(setProductsMetadata({ productTypes: checkedList }))
+            await dispatch(setProductsParams({ productTypes: checkedList }))
          }
       } catch (message) {
          console.warn(message)
@@ -25,7 +24,7 @@ export const useManageProduct = () => {
 
    const filterCatalogProducts = async (event: React.ChangeEvent<HTMLInputElement>) => {
       try {
-         return await dispatch(setProductsMetadata({ orderBy: event.target.value}))
+         return await dispatch(setProductsParams({ orderBy: event.target.value}))
       } catch (message) {
          console.warn(message)
       }

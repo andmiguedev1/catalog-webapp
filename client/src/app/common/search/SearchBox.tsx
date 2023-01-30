@@ -1,16 +1,18 @@
 import { useState } from 'react'
+
 import { debounce, TextField } from '@mui/material'
+
 import { useAppDispatch, useAppSelector } from '../../store/appStore'
-import { setProductsMetadata } from '../../store/reducers/catalogSlice'
+import { setProductsParams } from '../../store/reducers/catalogSlice'
 
 function SearchBox() {
 	const dispatch = useAppDispatch()
-	const { metadata } = useAppSelector(state => state.catalog)
-	const [searchWord, setSearchWord] = useState(metadata.searchWord)
+	const { params } = useAppSelector(state => state.catalog)
+	const [searchWord, setSearchWord] = useState(params.searchWord)
 
 	const finishedSearch = debounce(
 		(event: React.ChangeEvent<HTMLInputElement>) => {
-			dispatch(setProductsMetadata({ searchWord: event.target.value }))
+			dispatch(setProductsParams({ searchWord: event.target.value }))
 		},
 		3000,
 	)

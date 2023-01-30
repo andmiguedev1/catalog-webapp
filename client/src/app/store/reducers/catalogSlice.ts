@@ -3,8 +3,8 @@ import { createEntityAdapter , createAsyncThunk, createSlice } from '@reduxjs/to
 import agent from '../../api/agent'
 
 import { AppState } from '../appStore'
-import { getAxiosParams } from '../../api/requests/requests'
 import { Product, ProductParams } from '../../models/product'
+import { Metadata } from '../../models/pagination'
 
 interface CatalogState {
    loadProducts: boolean,
@@ -13,10 +13,30 @@ interface CatalogState {
    types: Array<string>
    loadFilters: boolean
    status: string,
-   metadata: ProductParams
+   params: ProductParams,
+   metadata: Metadata | null
 }
 
 const catalogAdapter = createEntityAdapter<Product>()
+
+function getAxiosParams(productParams: ProductParams) {
+   const catalogParams = new URLSearchParams()
+   
+   catalogParams.append('pageNumber', productParams.pageNumber.toString())
+   catalogParams.append('pageSize', productParams.pageSize.toString())
+   catalogParams.append('orderBy', productParams.orderBy.toString())
+
+   if (productParams.searchWord)
+      catalogParams.append('searchWord', productParams.searchWord)
+   
+   if (productParams.productBrands)
+      catalogParams.append('brands', productParams.productBrands.toString())
+   
+    if (productParams.productTypes)
+      catalogParams.append('types', productParams.productTypes.toString())
+   
+   return catalogParams
+}
 
 export const fetchCategoriesAsync = createAsyncThunk(
    'catalog/fetchCategoriesAsync',
@@ -31,9 +51,12 @@ export const fetchCategoriesAsync = createAsyncThunk(
 
 export const fetchProductsAsync = createAsyncThunk<Product[], void, { state: AppState}>(
    'catalog/fetchProductsAsync', async (_, thunkAPI) => {
-      const productParams = getAxiosParams(thunkAPI.getState().catalog.metadata)
+      const productParams = getAxiosParams(thunkAPI.getState().catalog.params)
       try {
-         return await agent.CatalogRoutes.getRecentProducts(productParams)
+         const recentProducts = await agent.CatalogRoutes.getRecentProducts(productParams)
+         thunkAPI.dispatch(setProductsParams(recentProducts.metadata))
+         return recentProducts
+
       } catch (message: any) {
          return thunkAPI.rejectWithValue({
             error: message.data
@@ -42,11 +65,13 @@ export const fetchProductsAsync = createAsyncThunk<Product[], void, { state: App
    }
 )
 
-function productsMetadata() {
+function catalogParams() {
    return {
       pageNumber: 1,
       pageSize: 6,
-      orderBy: 'name'
+      orderBy: 'name',
+      brands: [],
+      types: []
    }
 }
 
@@ -55,22 +80,29 @@ export const catalogSlice = createSlice({
    initialState: catalogAdapter.getInitialState<CatalogState>({
       loadProducts: false,
       product: null,
+      metadata: null,
       brands: [],
       types: [],
       loadFilters: false,
-      status: 'idle',
-      metadata: productsMetadata()
+      params: catalogParams(),
+      status: 'idle'
    }),
    reducers: {
       setProductItem: (state, action) => {
          state.product = action.payload
       },
-      setProductsMetadata: (state, action) => {
+      resetProductsParams: (state) => {
+         state.params = catalogParams()
+      },
+      setProductsParams: (state, action) => {
          state.loadProducts = false
-         state.metadata = {...state.metadata, ...action.payload}
+         state.params = {...state.params, ...action.payload, pageNumber: 1}
+      },
+      setProductsMetadata: (state, action) => {
+         state.metadata = action.payload
       },
       resetProductsMetadata: (state) => {
-         state.metadata = productsMetadata()
+         state.params = catalogParams()
       }
    },
    extraReducers: (builder => {
@@ -101,7 +133,7 @@ export const catalogSlice = createSlice({
    })
 })
 
-export const { setProductItem, setProductsMetadata, resetProductsMetadata } = catalogSlice.actions
+export const { setProductItem, setProductsParams, resetProductsParams } = catalogSlice.actions
 export const productSelectors = catalogAdapter.getSelectors((state: AppState) => state.catalog)
 
 
