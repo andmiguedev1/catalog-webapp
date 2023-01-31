@@ -10,6 +10,6 @@ public static class HeaderExtensions
       // Parse pages metadata in network requests
       response.Headers.Add("Pagination", JsonSerializer.Serialize(pagesMetadata, networkResponse));
       // Allow network requests to accept pagination
-      response.Headers.Add("Access-Content-Expose-Headers", "Pagination");
+      response.Headers.Add("Access-Control-Expose-Headers", "Pagination");
    }
 }

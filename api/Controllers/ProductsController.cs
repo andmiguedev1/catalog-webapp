@@ -33,7 +33,7 @@ namespace api.Controllers
          // Divide products using pagination parameters
          var productsList = await PagesList<Product>.PaginatePages(productsQuery, storeParams.PageNumber, storeParams.PageSize);
          // Display a list of products for each page
-         Response.Headers.Add("Pagination", JsonSerializer.Serialize(productsList.Pages));
+         Response.SetPaginationHeader(productsList.Pages);
 
          return productsList;
       }

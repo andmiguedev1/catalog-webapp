@@ -1,3 +1,4 @@
+import { Pagination } from './../models/pagination';
 import axios, { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 
@@ -9,6 +10,17 @@ axios.defaults.withCredentials = true
 
 axios.interceptors.response.use(async serverResponse => {
    await delayRequest()
+  
+   let responseData = serverResponse.data
+   // Get pagination data from network headers
+   const paginationContent = serverResponse.headers['pagination']
+
+   if (paginationContent) {
+      // Append pagination data to the server response
+      serverResponse.data = new Pagination(responseData, JSON.parse(paginationContent))
+      // console.log(serverResponse)
+      return serverResponse
+   }
    
    return serverResponse
 }, (error: AxiosError) => {

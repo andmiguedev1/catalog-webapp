@@ -55,7 +55,7 @@ export const fetchProductsAsync = createAsyncThunk<Product[], void, { state: App
       try {
          const recentProducts = await agent.CatalogRoutes.getRecentProducts(productParams)
          thunkAPI.dispatch(setProductsParams(recentProducts.metadata))
-         return recentProducts
+         return recentProducts.pageItems
 
       } catch (message: any) {
          return thunkAPI.rejectWithValue({
@@ -91,12 +91,12 @@ export const catalogSlice = createSlice({
       setProductItem: (state, action) => {
          state.product = action.payload
       },
-      resetProductsParams: (state) => {
-         state.params = catalogParams()
-      },
       setProductsParams: (state, action) => {
          state.loadProducts = false
-         state.params = {...state.params, ...action.payload, pageNumber: 1}
+         state.params = {...state.params, ...action.payload}
+      },
+      resetProductsParams: (state) => {
+         state.params = catalogParams()
       },
       setProductsMetadata: (state, action) => {
          state.metadata = action.payload
@@ -133,7 +133,7 @@ export const catalogSlice = createSlice({
    })
 })
 
-export const { setProductItem, setProductsParams, resetProductsParams } = catalogSlice.actions
+export const { setProductItem, setProductsParams, resetProductsParams, setProductsMetadata } = catalogSlice.actions
 export const productSelectors = catalogAdapter.getSelectors((state: AppState) => state.catalog)
 
 
