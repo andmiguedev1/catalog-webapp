@@ -6,7 +6,7 @@ export interface Metadata {
 }
 
 // Initialize pagination data 
-export class Pagination<GenericType> {
+export class PaginateResponse<GenericType> {
    pageItems: GenericType
    pageInfo: Metadata
 

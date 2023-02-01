@@ -1,16 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Container, Grid } from '@mui/material'
 
-import agent from '../../api/agent'
-import { useAppDispatch, useAppSelector } from '../../store/appStore'
-
-import {
-	fetchCategoriesAsync,
-	getAxiosParams,
-	setPageNumber,
-} from '../../store/reducers/catalogSlice'
-
+import { useAppSelector } from '../../store/appStore'
 import { useManageProduct } from '../../hooks/useManageProduct'
+import { useManageCatalog } from '../../hooks/useManageCatalog'
 
 import Layout from '../../layout/Layout'
 import ProductsFilter from '../../components/products/ProductsFilter'
@@ -18,50 +11,35 @@ import ProductsList from '../../components/products/ProductsList'
 import PagePagination from '../../common/pagination/PagePagination'
 
 function CatalogList() {
-	const [categories, setCategories] = useState()
-	const [metadata, setMetadata] = useState()
-
-	const dispatch = useAppDispatch()
-	const {
-		loadFilters,
-		params,
-		metadata: catalog,
-	} = useAppSelector(state => state.catalog)
+	const { loadFilters } = useAppSelector(state => state.catalog)
 
 	const { loadProducts, storeProducts, fetchCatalogProducts } =
 		useManageProduct()
 
-	async function fetchCatalogCategories() {
-		if (!loadFilters) {
-			await dispatch(fetchCategoriesAsync())
-				.then(response => response.payload)
-				.then(productFilters => setCategories(productFilters))
-		}
-	}
-
-	const catalogParams = getAxiosParams(params)
-	async function fetchCatalogPagination() {
-		await agent.CatalogRoutes.getRecentProducts(catalogParams)
-			.then(response => response.pageInfo)
-			.then(catalogMetadata => setMetadata(catalogMetadata))
-	}
+	const {
+		categories,
+		pagination,
+		fetchCatalogCategories,
+		fetchCatalogPagination,
+		changeCatalogPage,
+	} = useManageCatalog()
 
 	useEffect(() => {
 		if (!loadProducts) {
 			fetchCatalogProducts()
+			fetchCatalogPagination()
+		}
+		if (!loadFilters) {
+			fetchCatalogCategories()
 		}
 
 		// eslint-disable-next-line
 	}, [loadProducts])
 
-	useEffect(() => {
-		fetchCatalogCategories()
-		fetchCatalogPagination()
-		// eslint-disable-next-line
-	}, [])
-
 	// if (loadingStatus.includes('pending'))
 	//	return <LoadingIndicator message='Loading Catalog...' />
+
+	console.log(pagination)
 
 	return (
 		<Layout>
@@ -75,12 +53,10 @@ function CatalogList() {
 					</Grid>
 					<Grid item xs={3} />
 					<Grid item xs={9}>
-						{metadata && (
+						{pagination && (
 							<PagePagination
-								pageInfo={metadata}
-								onPageChange={(currentPage: number) => {
-									dispatch(setPageNumber({ pageNumber: currentPage }))
-								}}
+								pageInfo={pagination}
+								onPageChange={(page: number) => changeCatalogPage(page)}
 							/>
 						)}
 					</Grid>

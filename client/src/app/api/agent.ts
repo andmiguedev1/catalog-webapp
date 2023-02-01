@@ -1,4 +1,4 @@
-import { Pagination } from './../models/pagination';
+import { PaginateResponse } from './../models/pagination';
 import axios, { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 
@@ -17,7 +17,7 @@ axios.interceptors.response.use(async serverResponse => {
 
    if (paginationContent) {
       // Append pagination data to the server response
-      serverResponse.data = new Pagination(responseData, JSON.parse(paginationContent))
+      serverResponse.data = new PaginateResponse(responseData, JSON.parse(paginationContent))
       return serverResponse
    }
    

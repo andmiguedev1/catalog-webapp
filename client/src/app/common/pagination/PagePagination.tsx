@@ -5,15 +5,19 @@ import { Metadata } from '../../models/pagination'
 
 interface Props {
 	pageInfo: Metadata
-	onPageChange: (page: number) => void
+	onPageChange: (page: number) => Promise<void>
 }
 
 function PagePagination({ pageInfo, onPageChange }: Props) {
 	const { currentPage, pageSize, totalPages, totalCount } = pageInfo
-	console.log(currentPage)
 
 	return (
-		<Box display='flex' justifyContent='center' alignItems='center'>
+		<Box
+			display='flex'
+			justifyContent='center'
+			alignItems='center'
+			sx={{ marginBlock: 2 }}
+		>
 			<Typography>
 				Displaying &nbsp;
 				{getCurrentPage(currentPage, pageSize)}&nbsp;-&nbsp;
