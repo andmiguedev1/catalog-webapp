@@ -1,5 +1,17 @@
 import { Cart } from "../models/cart"
 
+export function getTotalPages(currentPage: number, pageSize: number, totalCount: number) {
+   if (currentPage * pageSize > totalCount) {
+      return totalCount
+   }
+
+   return currentPage * pageSize
+}
+
+export function getCurrentPage(pageNumber: number, pageSize: number) {
+   return (pageNumber - 1) * pageSize + 1
+}
+
 export function getSubtotalCost(cart: Cart | null): number {
    return cart?.cartItems.reduce((itemCost, customerItem) => itemCost + (customerItem.quantity * customerItem.price), 0) ?? 0
 }

@@ -1,19 +1,32 @@
 import { useState, useEffect } from 'react'
-import { Container, Grid, Box, Typography, Pagination } from '@mui/material'
+import { Container, Grid } from '@mui/material'
 
+import agent from '../../api/agent'
 import { useAppDispatch, useAppSelector } from '../../store/appStore'
-import { fetchCategoriesAsync } from '../../store/reducers/catalogSlice'
+
+import {
+	fetchCategoriesAsync,
+	getAxiosParams,
+	setPageNumber,
+} from '../../store/reducers/catalogSlice'
+
 import { useManageProduct } from '../../hooks/useManageProduct'
 
 import Layout from '../../layout/Layout'
 import ProductsFilter from '../../components/products/ProductsFilter'
 import ProductsList from '../../components/products/ProductsList'
+import PagePagination from '../../common/pagination/PagePagination'
 
 function CatalogList() {
 	const [categories, setCategories] = useState()
+	const [metadata, setMetadata] = useState()
 
 	const dispatch = useAppDispatch()
-	const { loadFilters } = useAppSelector(state => state.catalog)
+	const {
+		loadFilters,
+		params,
+		metadata: catalog,
+	} = useAppSelector(state => state.catalog)
 
 	const { loadProducts, storeProducts, fetchCatalogProducts } =
 		useManageProduct()
@@ -26,6 +39,13 @@ function CatalogList() {
 		}
 	}
 
+	const catalogParams = getAxiosParams(params)
+	async function fetchCatalogPagination() {
+		await agent.CatalogRoutes.getRecentProducts(catalogParams)
+			.then(response => response.pageInfo)
+			.then(catalogMetadata => setMetadata(catalogMetadata))
+	}
+
 	useEffect(() => {
 		if (!loadProducts) {
 			fetchCatalogProducts()
@@ -36,6 +56,7 @@ function CatalogList() {
 
 	useEffect(() => {
 		fetchCatalogCategories()
+		fetchCatalogPagination()
 		// eslint-disable-next-line
 	}, [])
 
@@ -54,10 +75,14 @@ function CatalogList() {
 					</Grid>
 					<Grid item xs={3} />
 					<Grid item xs={9}>
-						<Box display='flex' justifyContent='center' alignItems='center'>
-							<Typography>Displaying 1-6 (20 items)</Typography>
-							<Pagination color='secondary' size='large' count={10} page={2} />
-						</Box>
+						{metadata && (
+							<PagePagination
+								pageInfo={metadata}
+								onPageChange={(currentPage: number) => {
+									dispatch(setPageNumber({ pageNumber: currentPage }))
+								}}
+							/>
+						)}
 					</Grid>
 				</Grid>
 			</Container>

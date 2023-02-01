@@ -19,7 +19,7 @@ interface CatalogState {
 
 const catalogAdapter = createEntityAdapter<Product>()
 
-function getAxiosParams(productParams: ProductParams) {
+export function getAxiosParams(productParams: ProductParams) {
    const catalogParams = new URLSearchParams()
    
    catalogParams.append('pageNumber', productParams.pageNumber.toString())
@@ -95,6 +95,10 @@ export const catalogSlice = createSlice({
          state.loadProducts = false
          state.params = {...state.params, ...action.payload}
       },
+      setPageNumber: (state, action) => {
+         state.loadProducts = false
+         state.params = {...state.params, ...action.payload}
+      },
       resetProductsParams: (state) => {
          state.params = catalogParams()
       },
@@ -133,7 +137,7 @@ export const catalogSlice = createSlice({
    })
 })
 
-export const { setProductItem, setProductsParams, resetProductsParams, setProductsMetadata } = catalogSlice.actions
+export const { setProductItem, setProductsParams, setPageNumber, setProductsMetadata, resetProductsParams } = catalogSlice.actions
 export const productSelectors = catalogAdapter.getSelectors((state: AppState) => state.catalog)
 
 

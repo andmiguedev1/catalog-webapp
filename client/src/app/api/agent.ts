@@ -18,7 +18,6 @@ axios.interceptors.response.use(async serverResponse => {
    if (paginationContent) {
       // Append pagination data to the server response
       serverResponse.data = new Pagination(responseData, JSON.parse(paginationContent))
-      // console.log(serverResponse)
       return serverResponse
    }
    
