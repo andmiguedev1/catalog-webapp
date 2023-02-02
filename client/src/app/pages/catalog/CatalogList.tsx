@@ -6,6 +6,7 @@ import { useManageProduct } from '../../hooks/useManageProduct'
 import { useManageCatalog } from '../../hooks/useManageCatalog'
 
 import Layout from '../../layout/Layout'
+import LoadingIndicator from '../../common/loading/LoadingIndicator'
 import ProductsFilter from '../../components/products/ProductsFilter'
 import ProductsList from '../../components/products/ProductsList'
 import PagePagination from '../../common/pagination/PagePagination'
@@ -36,8 +37,7 @@ function CatalogList() {
 		// eslint-disable-next-line
 	}, [loadProducts])
 
-	// if (loadingStatus.includes('pending'))
-	//	return <LoadingIndicator message='Loading Catalog...' />
+	if (!loadFilters) return <LoadingIndicator message='Loading Catalog...' />
 
 	console.log(pagination)
 

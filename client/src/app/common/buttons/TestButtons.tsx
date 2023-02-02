@@ -3,7 +3,7 @@ import { Button, ButtonGroup, Container, Typography } from '@mui/material'
 
 import agent from '../../api/agent'
 import Layout from '../../layout/Layout'
-import AlertErrors from '../errors/AlertErrors'
+import AlertErrors from '../alerts/AlertErrors'
 
 function TestButtons() {
 	const [invalidErrors, setInvalidErrors] = useState<string[]>([])

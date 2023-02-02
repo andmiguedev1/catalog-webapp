@@ -6,6 +6,7 @@ import { useManageCart } from '../../hooks/useManageCart'
 import Layout from '../../layout/Layout'
 import ShoppingCart from '../../components/cart/ShoppingCart'
 import SummaryCart from '../../components/cart/SummaryCart'
+import AlertPage from '../../common/alerts/AlertPage'
 
 function CartList() {
 	const { shoppingCart: shoppingList, fetchCustomerCart } = useManageCart()
@@ -14,6 +15,10 @@ function CartList() {
 		fetchCustomerCart()
 		// eslint-disable-next-line
 	}, [])
+
+	if (!shoppingList) {
+		return <AlertPage />
+	}
 
 	return (
 		<Layout>

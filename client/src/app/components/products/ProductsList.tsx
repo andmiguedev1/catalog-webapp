@@ -1,15 +1,19 @@
 import { Grid } from '@mui/material'
+import CardSkeleton from '../../common/cards/CardSkeleton'
+import { useManageProduct } from '../../hooks/useManageProduct'
 
 import { StoreProducts } from '../../models/product'
 
 import ProductCard from './ProductCard'
 
 function ProductsList({ products }: StoreProducts) {
+	const { loadProducts } = useManageProduct()
+
 	return (
 		<Grid container spacing={2}>
 			{products.map(product => (
 				<Grid item xs={12} sm={6} md={4} key={product.id}>
-					<ProductCard product={product} />
+					{!loadProducts ? <CardSkeleton /> : <ProductCard product={product} />}
 				</Grid>
 			))}
 		</Grid>
