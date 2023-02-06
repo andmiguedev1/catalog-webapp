@@ -1,13 +1,20 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { ToastContainer } from 'react-toastify'
-import { createTheme, ThemeProvider, CssBaseline } from '@mui/material'
+
+import {
+	createTheme,
+	ThemeProvider,
+	CssBaseline,
+	ThemeOptions,
+} from '@mui/material'
 
 import { useManageCart } from '../hooks/useManageCart'
+import { useChangeTheme } from '../hooks/useChangeTheme'
 
 import TopBar from '../common/navigation/TopBar/TopBar'
-
 import { getBrowserCookie } from '../utils'
 
+import palette from '../theme/palette'
 import 'react-toastify/dist/ReactToastify.css'
 
 interface Props {
@@ -16,28 +23,17 @@ interface Props {
 
 function Layout({ children }: Props) {
 	const { fetchCustomerCart } = useManageCart()
+	const { togglePalette, themeMode, toggleTheme } = useChangeTheme()
+	const defaultMode = togglePalette ? 'light' : 'dark'
 
-	const [darkMode, setDarkMode] = useState(false)
-	const paletteToggle = darkMode ? 'dark' : 'light'
+	const themeOptions: ThemeOptions = useMemo(
+		() => ({
+			palette: palette(defaultMode),
+		}),
+		[defaultMode],
+	)
 
-	const theme = createTheme({
-		palette: {
-			mode: paletteToggle,
-			primary: {
-				main: paletteToggle === 'light' ? '#d8d8d8' : '#182747',
-			},
-			secondary: {
-				main: paletteToggle === 'light' ? '#50577a' : '#62728e',
-			},
-			background: {
-				default: paletteToggle === 'light' ? '#f5f5f5' : '#434242',
-			},
-		},
-	})
-
-	function toggleThemeMode() {
-		setDarkMode(!darkMode)
-	}
+	const theme = createTheme(themeOptions)
 
 	useEffect(() => {
 		const customerId = getBrowserCookie('clientId')
@@ -53,7 +49,7 @@ function Layout({ children }: Props) {
 			<ThemeProvider theme={theme}>
 				<ToastContainer />
 				<CssBaseline />
-				<TopBar darkMode={darkMode} toggleThemeMode={toggleThemeMode} />
+				<TopBar themeMode={themeMode} toggleTheme={toggleTheme} />
 				{children}
 			</ThemeProvider>
 		</>

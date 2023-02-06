@@ -14,13 +14,14 @@ import { LightMode, DarkMode, ShoppingCart } from '@mui/icons-material'
 
 import { useAppSelector } from '../../../store/appStore'
 import { updateCartQuantity } from '../../../utils'
+import { ChangeEvent } from 'react'
 
 interface Props {
-	darkMode: boolean
-	toggleThemeMode: () => void
+	themeMode: boolean
+	toggleTheme: (event: ChangeEvent<HTMLInputElement>) => void
 }
 
-function TopBar({ darkMode, toggleThemeMode }: Props) {
+function TopBar({ themeMode, toggleTheme }: Props) {
 	const { cart: shoppingCart } = useAppSelector(state => state.cart)
 	const customerCart = updateCartQuantity(shoppingCart)
 
@@ -38,7 +39,7 @@ function TopBar({ darkMode, toggleThemeMode }: Props) {
 					</Typography>
 					<Box sx={{ flexGrow: 1 }} />
 					<Box sx={{ paddingInline: 1 }} />
-					{!darkMode ? (
+					{!themeMode ? (
 						<LightMode htmlColor='#000' />
 					) : (
 						<DarkMode htmlColor='#fff' />
@@ -46,7 +47,7 @@ function TopBar({ darkMode, toggleThemeMode }: Props) {
 
 					<FormGroup sx={{ paddingInline: 1 }}>
 						<FormControlLabel
-							control={<Switch checked={darkMode} onChange={toggleThemeMode} />}
+							control={<Switch checked={themeMode} onChange={toggleTheme} />}
 							label=''
 						/>
 					</FormGroup>

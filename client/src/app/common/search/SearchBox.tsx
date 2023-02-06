@@ -19,7 +19,7 @@ function SearchBox() {
 
 	return (
 		<TextField
-			label='Search products...'
+			label='Search any product...'
 			variant='outlined'
 			fullWidth
 			value={searchWord || ''}

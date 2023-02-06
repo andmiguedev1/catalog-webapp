@@ -1,4 +1,4 @@
-import { Checkbox, FormControlLabel, FormGroup } from '@mui/material'
+import { Checkbox, FormControlLabel, FormGroup, FormLabel } from '@mui/material'
 import { useState } from 'react'
 
 interface Props {
@@ -31,6 +31,7 @@ function CheckboxList({ items, checked, onChange }: Props) {
 
 	return (
 		<FormGroup>
+			<FormLabel component='legend'>Filter by Brand</FormLabel>
 			{items?.map(item => (
 				<FormControlLabel
 					control={

@@ -16,7 +16,7 @@ interface Props {
 function SelectionList({ optionsList, selectValue, onChange }: Props) {
 	return (
 		<FormControl component='fieldset'>
-			<FormLabel component='legend'>Categories</FormLabel>
+			<FormLabel component='legend'>Search by Price</FormLabel>
 			<RadioGroup onChange={onChange} value={selectValue}>
 				{optionsList.map(({ value, label }) => (
 					<FormControlLabel
