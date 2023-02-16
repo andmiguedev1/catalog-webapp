@@ -1,9 +1,9 @@
 import { Grid } from '@mui/material'
-import CardSkeleton from '../../common/cards/CardSkeleton'
-import { useManageProduct } from '../../hooks/useManageProduct'
 
+import { useManageProduct } from '../../hooks/useManageProduct'
 import { StoreProducts } from '../../models/product'
 
+import CardSkeleton from '../../common/cards/CardSkeleton'
 import ProductCard from './ProductCard'
 
 function ProductsList({ products }: StoreProducts) {

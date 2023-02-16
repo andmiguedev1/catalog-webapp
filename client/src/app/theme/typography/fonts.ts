@@ -1,1 +1,0 @@
-export const fontPrimary = 'Public Sans, sans-serif'
