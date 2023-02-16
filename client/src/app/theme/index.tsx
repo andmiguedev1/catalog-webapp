@@ -16,6 +16,7 @@ import GlobalStyles from './shared/GlobalStyles'
 import themeShadows from './shadows/customShadows'
 
 import ThemeComponents from './elements'
+import modifyShadows from './shadows/modifiedShadows'
 
 interface Props {
 	children: React.ReactNode
@@ -26,8 +27,9 @@ function ThemeProvider({ children }: Props) {
 
 	const themeOptions: any = useMemo(
 		() => ({
-			palette: themePalette,
+			palette: themePalette(themeMode),
 			typography,
+			shadows: modifyShadows(themeMode),
 			customShadows: themeShadows(themeMode),
 		}),
 		[],
