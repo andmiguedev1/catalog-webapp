@@ -1,7 +1,12 @@
-import { createContext, useCallback, useMemo } from 'react'
+import { createContext, useContext, useCallback, useMemo } from 'react'
 import useLocalStorage from '../../hooks/utils/useLocalStorage'
 
-const defaultSettings = {
+type ThemeModes = 'light' | 'dark'
+type ThemeModeSettings = {
+	themeMode: ThemeModes
+}
+
+const defaultSettings: ThemeModeSettings = {
 	themeMode: 'light',
 }
 
@@ -10,7 +15,16 @@ const initialState = {
 	onToggleMode: () => {},
 }
 
-const ThemingContent = createContext(initialState)
+export const ThemingContext = createContext(initialState)
+
+export const useThemingContext = () => {
+	const context = useContext(ThemingContext)
+
+	if (!context)
+		throw new Error('useThemingContext must be used inside ThemingProvider')
+
+	return context
+}
 
 interface Props {
 	children: React.ReactNode
@@ -33,8 +47,8 @@ export function ThemingProvider({ children }: Props) {
 	)
 
 	return (
-		<ThemingContent.Provider value={themeValues}>
+		<ThemingContext.Provider value={themeValues}>
 			{children}
-		</ThemingContent.Provider>
+		</ThemingContext.Provider>
 	)
 }
