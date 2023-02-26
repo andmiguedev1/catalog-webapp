@@ -17,6 +17,7 @@ export default function useLocalStorage<ValueType>(defaultKey: string, defaultVa
             window.removeEventListener('storage', localListener)
          }
       } 
+      
    }, [defaultKey, defaultValue])
 
    const setLocalStorage = (newValue: ValueType) => {

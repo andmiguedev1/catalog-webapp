@@ -32,7 +32,7 @@ function ThemeProvider({ children }: Props) {
 			shadows: modifyShadows(themeMode),
 			customShadows: themeShadows(themeMode),
 		}),
-		[],
+		[themeMode],
 	)
 
 	const theme = createTheme(themeOptions)
